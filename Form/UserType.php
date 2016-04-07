@@ -27,7 +27,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TaskBox\CMS\Bundle\Entity\User'
+            'data_class' => 'Lincode\Fly\Bundle\Entity\User'
         ));
     }
 }

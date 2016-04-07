@@ -15,7 +15,7 @@ class LoadUser implements FixtureInterface, ContainerAwareInterface, OrderedFixt
     public function load(ObjectManager $em) {
         $user = new User();
         $user->setName('Admin');
-        $user->setEmail('admin@taskbox.com.br');
+        $user->setEmail('admin@admin.com.br');
         $user->setPassword($this->encondePassword($user,'123'));
         $em->persist($user);
         $em->flush();

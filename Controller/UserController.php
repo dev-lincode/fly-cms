@@ -6,17 +6,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use TaskBox\CMS\Bundle\Entity\Member;
+use Lincode\Fly\Bundle\Entity\User;
 
 /**
- * Member controller.
+ * User controller.
  *
  * @Route("/user")
  */
 class UserController extends Controller
 {
     /**
-     * Lists all Member entities.
+     * Lists all User entities.
      *
      * @Route("/", name="user_index")
      * @Method("GET")
@@ -25,23 +25,23 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('CMSBundle:Member')->findAll();
+        $users = $em->getRepository('FlyBundle:User')->findAll();
 
-        return $this->render('CMSBundle:Member:index.html.twig', array(
+        return $this->render('FlyBundle:User:index.html.twig', array(
             'users' => $users,
         ));
     }
 
     /**
-     * Creates a new Member entity.
+     * Creates a new User entity.
      *
      * @Route("/new", name="user_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $user = new Member();
-        $form = $this->createForm('TaskBox\CMS\Bundle\Form\MemberType', $user);
+        $user = new User();
+        $form = $this->createForm('Lincode\Fly\Bundle\Form\UserType', $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -52,38 +52,38 @@ class UserController extends Controller
             return $this->redirectToRoute('user_show', array('id' => $user->getId()));
         }
 
-        return $this->render('CMSBundle:Member:new.html.twig', array(
+        return $this->render('FlyBundle:User:new.html.twig', array(
             'user' => $user,
             'form' => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Member entity.
+     * Finds and displays a User entity.
      *
      * @Route("/{id}", name="user_show")
      * @Method("GET")
      */
-    public function showAction(Member $user)
+    public function showAction(User $user)
     {
         $deleteForm = $this->createDeleteForm($user);
 
-        return $this->render('CMSBundle:Member:show.html.twig', array(
+        return $this->render('FlyBundle:User:show.html.twig', array(
             'user' => $user,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Member entity.
+     * Displays a form to edit an existing User entity.
      *
      * @Route("/{id}/edit", name="user_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Member $user)
+    public function editAction(Request $request, User $user)
     {
         $deleteForm = $this->createDeleteForm($user);
-        $editForm = $this->createForm('TaskBox\CMS\Bundle\Form\MemberType', $user);
+        $editForm = $this->createForm('Lincode\Fly\Bundle\Form\UserType', $user);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -94,7 +94,7 @@ class UserController extends Controller
             return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
         }
 
-        return $this->render('CMSBundle:Member:edit.html.twig', array(
+        return $this->render('FlyBundle:User:edit.html.twig', array(
             'user' => $user,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -102,12 +102,12 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes a Member entity.
+     * Deletes a User entity.
      *
      * @Route("/{id}", name="user_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Member $user)
+    public function deleteAction(Request $request, User $user)
     {
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
@@ -122,13 +122,13 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a form to delete a Member entity.
+     * Creates a form to delete a User entity.
      *
-     * @param Member $user The Member entity
+     * @param User $user The User entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Member $user)
+    private function createDeleteForm(User $user)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))

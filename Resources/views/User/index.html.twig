@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Member list</h1>
+    <h1>User list</h1>
 
     <table>
         <thead>
@@ -12,17 +12,17 @@
             </tr>
         </thead>
         <tbody>
-        {% for member in members %}
+        {% for user in users %}
             <tr>
-                <td><a href="{{ path('member_show', { 'id': member.id }) }}">{{ member.id }}</a></td>
-                <td>{{ member.name }}</td>
+                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                <td>{{ user.name }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('member_show', { 'id': member.id }) }}">show</a>
+                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
                         </li>
                         <li>
-                            <a href="{{ path('member_edit', { 'id': member.id }) }}">edit</a>
+                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -33,7 +33,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('member_new') }}">Create a new entry</a>
+            <a href="{{ path('user_new') }}">Create a new entry</a>
         </li>
     </ul>
 {% endblock %}

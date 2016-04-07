@@ -40,7 +40,7 @@ class LoginService extends Service {
 			$form->addError(new FormError("Usuário e/ou senha incorretas"));
 		}
 
-		return $this->render('CMSBundle:Login:login.html.twig', [
+		return $this->render('FlyBundle:Login:login.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
