@@ -1,0 +1,4 @@
+services:
+    cms.login.service:
+        class: Lincode\Fly\Bundle\Service\LoginService
+        arguments: [@service_container]

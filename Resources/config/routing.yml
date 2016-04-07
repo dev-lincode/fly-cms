@@ -1,0 +1,4 @@
+cms_member_annotation:
+    resource: "@FlyBundle/Controller"
+    prefix:   /
+    type: annotation
