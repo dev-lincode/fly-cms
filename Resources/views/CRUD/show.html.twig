@@ -1,0 +1,56 @@
+{% extends 'FlyBundle:Template:base.html.twig' %}
+
+{% block body %}
+
+    {% if userPermissions.create and permissions.create %}
+        <ul class="add-new-buttom">
+            <li>
+                <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
+            </li>
+        </ul>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ 'Exibindo ' ~ configs.singular_name ~ ' "' ~ attribute(entity, configs.title_field) ~ '"' }}</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table id="data-table-selection" class="table table-striped">
+                <tbody>
+                <tr>
+                    <th class="col-md-3"><strong>ID</strong></th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+
+                {% for field, value in configs.show_fields  %}
+                    <tr>
+                        {% if value.type is defined %}
+                            <th class="col-md-3">{{ value.label }}</th>
+                            <td class="col-md-9">
+                                {% if attribute(entity, field) %}
+                                    {% if value.type == 'date'  %}
+                                        {{ attribute(entity, field) | date('d/m/Y') }}
+                                    {% elseif value.type == 'boolean' %}
+                                        <i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i>
+                                    {% elseif value.type == 'image' %}
+                                        <img height="100" src="{{ asset(value.path ~ '/' ~ attribute(entity, field)) }}" />
+                                    {% else %}
+                                        {{ attribute(entity, field) }}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <th class="col-md-2">{{ value }}</th>
+                            <td class="col-md-10">{{ attribute(entity, field) }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include 'FlyBundle:Template:actions.html.twig' with { back: true, create: true, edit: true, delete: true, entity: entity, configs: configs, userPermissions: userPermissions, permissions: permissions } only %}
+
+{% endblock %}

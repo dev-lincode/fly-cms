@@ -3309,6 +3309,31 @@ output {
   color: #000000;
 }
 
+ul{
+  padding: 0;
+}
+
+ul li{
+  list-style: none;
+}
+
+.add-new-buttom{
+  margin-bottom: 30px;
+}
+
+.icon-action{
+  font-size: 18px;
+}
+.action-buttons li{
+  float: left;
+  margin-right: 15px;
+}
+
+.cms-routes{
+  float: left;
+  width: 20%;
+}
+
 .form-control {
   display: block;
   width: 100%;
@@ -3821,7 +3846,6 @@ select[multiple].input-lg {
   .form-horizontal .control-label {
     text-align: right;
     margin-bottom: 0;
-    padding-top: 7px;
   }
 }
 
@@ -10716,7 +10740,7 @@ h6 small,
   height: 129px;
   margin-bottom: 5px;
   width: 100%;
-  background: url(../img/profile-menu.png) no-repeat left top;
+  background: url(../images/profile-menu.png) no-repeat left top;
   background-size: 100%;
 }
 

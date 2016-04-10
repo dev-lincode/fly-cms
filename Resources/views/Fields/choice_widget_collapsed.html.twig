@@ -1,0 +1,9 @@
+<select id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" class="selectpicker" data-live-search="true" {{ form.vars.multiple ? "multiple" }}>
+    {% if form.vars.required == false %}
+        <option {{ form.vars.value == "" ? "selected" }} value="">{{ form.vars.placeholder }}</option>
+    {% endif %}
+
+    {% for choice in form.vars.choices %}
+        <option {{ form.vars.value == choice.value ? "selected" }} value="{{ choice.value }}">{{ choice.label }}</option>
+    {% endfor %}
+</select>

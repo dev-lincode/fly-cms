@@ -896,4 +896,131 @@ $(document).ready(function(){
 
     });
 
+    $('.select-all').change(function(){
+        $(".select-record").prop('checked', $(this).prop("checked"));
+    });
+
+    $('.delete-all').click(function(){
+
+        var filled = 0;
+        $(".select-record").each(function(){
+            if($(this).is(":checked")){
+                filled++;
+            }
+        });
+
+        if(filled > 0){
+            showMessage("Excluir?", "Deseja realmente excluir todos os registros selecionados?", 'form', $('#list-form'));
+        }else{
+            swal({text: "Selecione ao menos 1 registro!", title: "Excluir"})
+        }
+
+        return false;
+    });
+
+    $('.delete-record').click(function(){
+        showMessage("Excluir?", "Deseja realmente excluir este registro?", 'link', $(this));
+        return false;
+    });
+
+    checkUncheck();
 });
+
+function notify($title, $message, $type){
+    $.growl({
+        title: $title,
+        message: $message
+    },{
+        element: 'body',
+        type: $type,
+        allow_dismiss: true,
+        spacing: 10,
+        z_index: 1031,
+        delay: 2500,
+        timer: 1000,
+        mouse_over: true,
+        icon_type: 'class',
+        template: '<div data-growl="container" class="alert" role="alert">' +
+                  '<button type="button" class="close" data-growl="dismiss">' +
+                  '<span aria-hidden="true">&times;</span>' +
+                  '<span class="sr-only">Close</span>' +
+                  '</button>' +
+                  '<span data-growl="icon"></span>' +
+                  '<span data-growl="title"></span>' +
+                  '<span data-growl="message"></span>' +
+                  '<a href="#" data-growl="url"></a>' +
+                  '</div>'
+    });
+};
+
+function checkUncheck(){
+    $('#fly_profile_permission_show_all').change(function(){
+        if($(this).is(':checked')){
+            $('.fly_profile_permission_show').each(function(){
+                $(this).prop( "checked", true );
+            });
+        }else{
+            $('.fly_profile_permission_show').each(function(){
+                $(this).prop( "checked", false );
+            });
+        }
+    });
+
+    $('#fly_profile_permission_create_all').change(function(){
+        if($(this).is(':checked')){
+            $('.fly_profile_permission_create').each(function(){
+                $(this).prop( "checked", true );
+            });
+        }else{
+            $('.fly_profile_permission_create').each(function(){
+                $(this).prop( "checked", false );
+            });
+        }
+    });
+
+    $('#fly_profile_permission_update_all').change(function(){
+        if($(this).is(':checked')){
+            $('.fly_profile_permission_update').each(function(){
+                $(this).prop( "checked", true );
+            });
+        }else{
+            $('.fly_profile_permission_update').each(function(){
+                $(this).prop( "checked", false );
+            });
+        }
+    });
+
+    $('#fly_profile_permission_delete_all').change(function(){
+        if($(this).is(':checked')){
+            $('.fly_profile_permission_delete').each(function(){
+                $(this).prop( "checked", true );
+            });
+        }else{
+            $('.fly_profile_permission_delete').each(function(){
+                $(this).prop( "checked", false );
+            });
+        }
+    });
+}
+
+function showMessage($title, $message, $type, $element){
+    swal({
+        title: $title,
+        text: $message,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Não",
+        confirmButtonColor: "#F44336",
+        confirmButtonText: "Sim",
+        closeOnConfirm: true
+    }, function(isConfirm){
+        if(isConfirm){
+            if($type == 'form'){
+                $element.trigger('submit');
+            }else if($type == 'link'){
+                console.log('aqui');
+                window.location.href = $element.attr('href');
+            }
+        }
+    });
+}

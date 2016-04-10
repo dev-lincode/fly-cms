@@ -1,0 +1,31 @@
+<ul class="action-buttons">
+    {% if back is defined and back %}
+        <li>
+            <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route) }}">Voltar</a>
+        </li>
+    {% endif %}
+
+    {% if create is defined and create and userPermissions.create and permissions.create %}
+        <li>
+            <a class="btn btn-info waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
+        </li>
+    {% endif %}
+
+    {% if edit is defined and edit and userPermissions.edit and permissions.edit %}
+        <li>
+            <a class="btn btn-primary waves-effect" href="{{ path( configs.prefix_route ~ '_edit', { 'id': entity.id }) }}">Editar</a>
+        </li>
+    {% endif %}
+
+    {% if delete is defined and delete and userPermissions.delete and permissions.delete %}
+        <li>
+            <a class="btn btn-danger waves-effect delete-record" href="{{ path( configs.prefix_route ~ '_delete', { 'id': entity.id }) }}">Excluir registro</a>
+        </li>
+    {% endif %}
+
+    {% if deleteAll is defined and deleteAll and userPermissions.delete and permissions.delete %}
+        <li>
+            <a class="btn btn-danger waves-effect delete-all" href="#">Excluir selecionados</a>
+        </li>
+    {% endif %}
+</ul>

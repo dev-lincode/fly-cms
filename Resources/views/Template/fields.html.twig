@@ -1,0 +1,25 @@
+{% form_theme form _self %}
+
+{% block form_row %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:form_row.html.twig' with { form : form } only %}
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block checkbox_row %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:checkbox_row.html.twig' with { form : form } only %}
+    {% endspaceless %}
+{% endblock checkbox_row %}
+
+{% block submit_row %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:submit_row.html.twig' with { form : form } only %}
+    {% endspaceless %}
+{% endblock submit_row %}
+
+{% block choice_widget_collapsed %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:choice_widget_collapsed.html.twig' with { form : form } only %}
+    {% endspaceless %}
+{% endblock choice_widget_collapsed %}

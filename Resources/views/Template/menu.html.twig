@@ -1,0 +1,32 @@
+{% spaceless %}
+    {% for item in itens %}
+        {% if item.node is not defined %}
+            {% set href = (item.route is defined) ? item.route : "#" %}
+
+            <li {% if item.active is defined %} class="active"{% endif %}>
+                <a href="{{ href }}" {% if item.active is defined %} class="active"{% endif %}>
+                    {% if item.icon is defined %}<i class="zmdi zmdi-{{ item.icon }}"></i>{% endif %} {{ item.label }}
+                </a>
+            </li>
+        {% else %}
+            <li class="sub-menu {% if item.parent is defined %}active toggled{% endif %}">
+
+                <a href="#">
+                    {% if item.icon is defined %}<i class="zmdi zmdi-{{ item.icon }}"></i>{% endif %} {{ item.label }}
+                </a>
+
+                <ul>
+                    {% for node in item.node %}
+                        {% set href = (node.route is defined) ? node.route : "#" %}
+                        <li>
+                            <a {% if node.active is defined %} class="active"{% endif %} href="{{ href }}">
+                                {{ node.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+

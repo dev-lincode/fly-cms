@@ -1,0 +1,107 @@
+{% extends 'FlyBundle:Template:base.html.twig' %}
+
+{% block body %}
+
+    {% if userPermissions.create and permissions.create %}
+        <ul class="add-new-buttom">
+            <li>
+                <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
+            </li>
+        </ul>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ 'Listando ' ~ configs.plural_name }}</h2>
+        </div>
+
+        <div class="table-responsive">
+            <form id="list-form" action="{{ path( configs.prefix_route ~ '_delete_all') }}" method="post">
+                <table id="data-table-selection" class="table table-striped">
+                    <thead>
+                        <tr>
+                            {% if userPermissions.delete and permissions.delete %}
+                                <th class="col-md-1">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" class="select-all" value="">
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </th>
+                            {% endif %}
+                            <th class="col-md-1">Id</th>
+                            {% for field, value in configs.list_fields  %}
+                                {% if value.type is defined %}
+                                    {% if value.class is defined %}
+                                        <th class="{{ value.class }}">{{ value.label }}</th>
+                                    {% else %}
+                                        <th class="col-md-2">{{ value.label }}</th>
+                                    {% endif %}
+                                {% elseif  value.label is defined %}
+                                    {% if value.class is defined %}
+                                        <th class="{{ value.class }}">{{ value.label }}</th>
+                                    {% else %}
+                                        <th class="col-md-2">{{ value.label }}</th>
+                                    {% endif %}
+                                {% else %}
+                                    <th class="col-md-2">{{ value }}</th>
+                                {% endif %}
+                            {% endfor %}
+                            <th class="col-md-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            {% if userPermissions.delete and permissions.delete %}
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="records" class="select-record" value="{{ entity.id }}">
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </td>
+                            {% endif %}
+                            <td><a href="{{ path( configs.prefix_route ~ '_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            {% for field, value in configs.list_fields  %}
+                                {% if value.type is defined %}
+                                    {% if value.type == 'date'  %}
+                                        <td>{{ attribute(entity, field) | date('d/m/Y') }}</td>
+                                    {% elseif value.type == 'boolean' %}
+                                        <td><i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i></td>
+                                    {% else %}
+                                        <td>{{ attribute(entity, field) }}</td>
+                                    {% endif %}
+                                {% else %}
+                                    <td>{{ attribute(entity, field) }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>
+                                {% if userPermissions.show and permissions.show %}
+                                    <a class="btn btn-default waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" href="{{ path( configs.prefix_route ~ '_show', { 'id': entity.id }) }}"><i class="icon-action zmdi zmdi-eye"></i></a>
+                                    &nbsp;&nbsp;
+                                {% endif %}
+
+                                {% if userPermissions.edit and permissions.edit %}
+                                    <a class="btn btn-default waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" href="{{ path( configs.prefix_route ~ '_edit', { 'id': entity.id }) }}"><i class="icon-action zmdi zmdi-edit"></i></a>
+                                    &nbsp;&nbsp;
+                                {% endif %}
+
+                                {% if userPermissions.delete and permissions.delete %}
+                                    <a class="btn btn-default delete-record waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Excluir" href="{{ path( configs.prefix_route ~ '_delete', { 'id': entity.id }) }}"><i class="icon-action zmdi zmdi-close-circle-o"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    {% include 'FlyBundle:Template:actions.html.twig' with { create: true, deleteAll: true, configs: configs, userPermissions: userPermissions, permissions: permissions } only %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+<!-- Javascript Libraries -->
+<script src="{{ asset('bundles/fly/plugins/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/fly/plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/fly/plugins/bootstrap-sweetalert/lib/sweet-alert.min.js') }}"></script>
+<script src="{{ asset('bundles/fly/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+
+<script src="{{ asset('bundles/fly/plugins/Waves/dist/waves.min.js') }}"></script>
+<script src="{{ asset('bundles/fly/plugins/bootstrap-growl/bootstrap-growl.min.js') }}"></script>
+<script src="{{ asset('bundles/fly/plugins/bootstrap-select/dist/js/bootstrap-select.js') }}"></script>
+
+<script src="{{ asset('bundles/fly/js/functions.js') }}"></script>
+
+{% set messages = app.session.flashbag.get("message") %}
+{% set errors = app.session.flashbag.get("error") %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        {% if (messages is not empty) %}
+        {% for message in messages  %}
+        notify('', '{{ message }}', 'success');
+        {% endfor %}
+        {% endif %}
+
+        {% if (errors is not empty) %}
+        {% for error in errors  %}
+        notify('', '{{ error }}', 'danger');
+        {% endfor %}
+        {% endif %}
+    });
+</script>

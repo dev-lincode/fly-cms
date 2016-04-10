@@ -3,15 +3,15 @@
 namespace Lincode\Fly\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="fly_user")
  * @ORM\Entity()
  */
-class User implements UserInterface {
+class User implements AdvancedUserInterface {
     /**
      * @var int
      *
@@ -36,6 +36,13 @@ class User implements UserInterface {
     private $email;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
@@ -49,6 +56,12 @@ class User implements UserInterface {
      * @ORM\Column(name="salt", type="string", length=255)
      */
     private $salt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserProfile")
+     * @ORM\JoinColumn(name="profileId", referencedColumnName="id")
+     */
+    private $profile;
 
     public function __construct() {
         $this->salt = base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
@@ -111,6 +124,20 @@ class User implements UserInterface {
     }
 
     /**
+     * @return boolean
+     */
+    public function isIsActive() {
+        return $this->isActive;
+    }
+
+    /**
+     * @param boolean $isActive
+     */
+    public function setIsActive( $isActive ) {
+        $this->isActive = $isActive;
+    }
+
+    /**
      * Set password
      *
      * @param string $password
@@ -157,6 +184,20 @@ class User implements UserInterface {
     }
 
     /**
+     * @return mixed
+     */
+    public function getProfile() {
+        return $this->profile;
+    }
+
+    /**
+     * @param mixed $profile
+     */
+    public function setProfile( $profile ) {
+        $this->profile = $profile;
+    }
+
+    /**
      * Get username
      *
      * @return string 
@@ -185,5 +226,21 @@ class User implements UserInterface {
     public function setConfirmPassword($confirmPassword) {
         $this->confirmPassword = $confirmPassword;
         return $this;
+    }
+
+    public function isAccountNonExpired() {
+        return $this->isActive;
+    }
+
+    public function isAccountNonLocked() {
+        return $this->isActive;
+    }
+
+    public function isCredentialsNonExpired() {
+        return $this->isActive;
+    }
+
+    public function isEnabled() {
+        return $this->isActive;
     }
 }

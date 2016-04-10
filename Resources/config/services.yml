@@ -1,4 +1,14 @@
 services:
+    cms.action_listener:
+        class: Lincode\Fly\Bundle\EventListener\BeforeControllerListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+        arguments: [@service_container]
+
+    cms.permissions.service:
+            class: Lincode\Fly\Bundle\Service\PermissionService
+            arguments: [@service_container]
+
     cms.login.service:
         class: Lincode\Fly\Bundle\Service\LoginService
         arguments: [@service_container]

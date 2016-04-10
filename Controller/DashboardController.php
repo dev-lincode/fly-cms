@@ -13,16 +13,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class DashboardController extends Controller
 {
+	protected $configs = [
+		'prefix_route' => 'fly_dashboard'
+	];
+
 	/**
 	 * Dashboard Index
 	 *
-	 * @Route("/", name="cms_dashboard")
+	 * @Route("/", name="fly_dashboard")
 	 * @Method("GET")
+	 * @Template("FlyBundle:Dashboard:index.html.twig")
 	 */
 	public function indexAction()
 	{
-
-		dump('olaa');
-		die;
+		return array('configs' => $this->configs);
 	}
 }

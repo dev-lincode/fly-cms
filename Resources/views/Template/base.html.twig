@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<head>
+
+    {% include 'FlyBundle:Helper:meta.html.twig' %}
+    {% include 'FlyBundle:Helper:styles.html.twig' %}
+
+    {% set viewDefaultParams = viewDefaultParams is defined ? viewDefaultParams : {} %}
+    {% set routeBase = configs.prefix_route is defined ? configs.prefix_route : null %}
+
+</head>
+<body class="toggled sw-toggled">
+
+{% include 'FlyBundle:Helper:header.html.twig' %}
+
+<section id="main" data-layout="layout-1">
+
+    {% include 'FlyBundle:Helper:sidebar.html.twig' %}
+
+    <section id="content">
+        <div class="container">
+            {% block body %}{% endblock %}
+            {#<div class="block-header">#}
+                {#<h2>Dashboard</h2>#}
+            {#</div>#}
+        </div>
+    </section>
+</section>
+
+<!-- Page Loader -->
+<div class="page-loader">
+    <div class="preloader pls-blue">
+        <svg class="pl-circular" viewBox="25 25 50 50">
+            <circle class="plc-path" cx="50" cy="50" r="20" />
+        </svg>
+
+        <p>Aguarde...</p>
+    </div>
+</div>
+
+{% include 'FlyBundle:Helper:scripts.html.twig' %}
+
+</body>
+</html>
+<!-- Localized -->

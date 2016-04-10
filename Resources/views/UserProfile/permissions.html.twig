@@ -1,0 +1,92 @@
+<div class="form-group">
+    <div class="col-sm-12" style="margin-top: 20px"></div>
+    <label class="col-sm-2 control-label">Opção</label>
+
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <div class="cms-routes check">&nbsp;</div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom control-label">
+                        <input id="fly_profile_permission_show_all" type="checkbox">
+                        <i class="input-helper"></i>
+                        Mostrar
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom control-label">
+                        <input id="fly_profile_permission_create_all" type="checkbox">
+                        <i class="input-helper"></i>
+                        Incluir
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom control-label">
+                        <input id="fly_profile_permission_update_all" type="checkbox">
+                        <i class="input-helper"></i>
+                        Modificar
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom control-label">
+                        <input id="fly_profile_permission_delete_all" type="checkbox">
+                        <i class="input-helper"></i>
+                        Excluir
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12" style="margin-top: 10px"></div>
+    {% for route in routes %}
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-md-10" style="border:1px solid #ccc; margin-bottom: 5px; padding: 0">
+            <div class="cms-routes description">
+                <input type="text" class="form-control" style="padding: 0 5px;" value="{{ route.label }}" disabled>
+                <input type="hidden" name="fly_profile_permission[{{loop.index}}][route]" value="{{ route.route }}">
+                <input type="hidden" name="fly_profile_permission[{{loop.index}}][params]" value="{{ route.params }}">
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" class="fly_profile_permission_show check-controller" name="fly_profile_permission[{{loop.index}}][show]"{% if route.show is defined %} checked="checked"{% endif %}>
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" class="fly_profile_permission_create check-controller" name="fly_profile_permission[{{loop.index}}][create]"{% if route.create is defined %} checked="checked"{% endif %}>
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" class="fly_profile_permission_update check-controller" name="fly_profile_permission[{{loop.index}}][update]"{% if route.update is defined %} checked="checked"{% endif %}>
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="cms-routes check" style="text-align: center">
+                <div class="checkbox">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" class="fly_profile_permission_delete check-controller" name="fly_profile_permission[{{loop.index}}][delete]"{% if route.delete is defined %} checked="checked"{% endif %}>
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div style="clear: both;"></div>

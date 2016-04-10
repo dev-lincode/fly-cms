@@ -1,0 +1,29 @@
+{% extends 'FlyBundle:Template:base.html.twig' %}
+{% form_theme form 'FlyBundle:Template:fields.html.twig' %}
+
+{% block body %}
+    <ul class="add-new-buttom">
+        <li>
+            <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
+        </li>
+    </ul>
+
+    <div class="card">
+
+        {{ form_start(form, {'attr': { 'class' : 'form-horizontal', 'role': 'form'}}) }}
+        <div class="card-header">
+            <h2>{{ 'Editar ' ~ configs.singular_name ~ ' "' ~ attribute(entity, configs.title_field) ~ '"' }}</h2>
+        </div>
+        <div class="card-body card-padding">
+            {{ form_row(form.name) }}
+            {{ form_row(form.administrator) }}
+            {{ render(controller('FlyBundle:UserProfile:listPermissions', { 'id': entity.id })) }}
+            {{ form_rest(form) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    {% include 'FlyBundle:Template:actions.html.twig' with { back: true, create: true, delete: true, entity: entity, configs: configs, userPermissions: userPermissions, permissions: permissions } only %}
+{% endblock %}
+
+	
