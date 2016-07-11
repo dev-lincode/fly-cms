@@ -1,5 +1,5 @@
-{% extends 'FlyBundle:Template:base.html.twig' %}
-{% form_theme form 'FlyBundle:Template:fields.html.twig' %}
+{% extends fly.base_template is defined ? fly.base_template : 'FlyBundle:Template:flyBase.html.twig' %}
+{% form_theme form fly.form_template is defined ? fly.form_template : 'FlyBundle:Template:fields.html.twig' %}
 
 {% block body %}
     <ul class="add-new-buttom">
@@ -7,6 +7,8 @@
             <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
         </li>
     </ul>
+
+    {% include 'FlyBundle:Helper:flashbag.html.twig' %}
 
     <div class="card">
 

@@ -15,7 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class UserController extends BaseController
 {
-
     protected $configs = [
         'prefix_route' => 'fly_user',
         'singular_name' => 'Usuário',
@@ -43,68 +42,42 @@ class UserController extends BaseController
     /**
      * Creates a new User entity.
      *
-     * @Route("/", name="fly_user_create")
-     * @Method("POST")
+     * @Route("/new", name="fly_user_new")
+     * @Method({"GET", "POST"})
      * @Template("FlyBundle:CRUD:new.html.twig")
      */
-    public function createAction(Request $request)
+    public function newAction(Request $request)
     {
-        $entity = new $this->configs['entity_class'];
-        $form = $this->createCreateForm($entity);
+        $controllerService = $this->get('fly.controller.service');
+        $entity = $this->getNewEntity();
+
+        $urlResponse = $this->generateUrl($this->configs['prefix_route'] . '_new');
+
+        $form = $controllerService->getForm($this->getNewEntityForm(), $entity, $urlResponse);
+
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entity->setPassword($this->encondePassword($entity,$form->getData()->getPassword()));
-            $em = $this->getDoctrine()->getManager();
+            $controllerService->save($entity);
 
-            if(!$this->getUser()->getProfile()->getAdministrator()) {
-                $entity->setParent($this->getUser());
-            }
-
-            $em->persist($entity);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add('title', $this->configs['singular_name']);
-            $this->get('session')->getFlashBag()->add('message', 'Novo registro adicionado com sucesso');
-
-            return $this->redirect($this->generateUrl($this->configs['prefix_route'] . '_show', array('id' => $entity->getId())));
+            return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
-            'configs' => $this->configs
+            'form' => $form->createView(),
+            'configs' => $this->configs,
+            'parent' => $this->parent,
+            'permissions' => $this->permissions,
+            'userPermissions' => $this->userPermissions
         );
-    }
-
-    protected function createCreateForm($entity)
-    {
-        $form = $this->createForm(new $this->configs['entity_form'], $entity, array(
-            'action' => $this->generateUrl($this->configs['prefix_route'] . '_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Salvar', 'attr' => array('class' => 'btn btn-success')));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new User entity.
-     *
-     * @Route("/new", name="fly_user_new")
-     * @Method("GET")
-     * @Template("FlyBundle:CRUD:new.html.twig")
-     */
-    public function newAction()
-    {
-        return parent::newAction();
     }
 
     /**
      * Finds and displays a User entity.
      *
-     * @Route("/{id}", name="fly_user_show")
+     * @Route("/show/{id}", name="fly_user_show")
      * @Method("GET")
      * @Template("FlyBundle:CRUD:show.html.twig")
      */
@@ -116,79 +89,41 @@ class UserController extends BaseController
     /**
      * Displays a form to edit an existing User entity.
      *
-     * @Route("/{id}/edit", name="fly_user_edit")
-     * @Method("GET")
+     * @Route("/edit/{id}", name="fly_user_edit")
+     * @Method({"GET", "POST"})
      * @Template("FlyBundle:CRUD:edit.html.twig")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
-        return parent::editAction($id);
-    }
-
-
-    protected function createEditForm($entity)
-    {
-        $form = $this->createForm(new $this->configs['entity_form'], $entity, array(
-            'action' => $this->generateUrl($this->configs['prefix_route'] . '_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        if($entity->getId() == $this->getUser()->getId()){
-            $form->remove('profile');
-        }
-
-        $form->add('submit', 'submit', array('label' => 'Salvar', 'attr' => array('class' => 'btn btn-success')));
-
-        return $form;
-    }
-
-    /**
-     * Edits an existing User entity.
-     *
-     * @Route("/{id}", name="fly_user_update")
-     * @Method("PUT")
-     * @Template("FlyBundle:CRUD:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository($this->configs['entity'])->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
-        }
-
-        if(count($this->upload_fields) > 0) {
-            foreach ( $this->upload_fields as $key => $value ) {
-                $files[ $key ] = call_user_func( array( $entity, $value['get'] ) );
-            }
-        }
-
+        $controllerService = $this->get('fly.controller.service');
+        $entity = $controllerService->find($this->configs['entity'], array('id' => $id));
         $oldPass = $entity->getPassword();
 
-        $form = $this->createEditForm($entity);
+        $urlResponse = $this->generateUrl($this->configs['prefix_route'] . '_edit', array('id' => $id));
+
+        $form = $controllerService->getForm($this->getNewEntityForm(), $entity, $urlResponse);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+
             if($form->getData()->getPassword() != ''){
                 $entity->setPassword($this->encondePassword($entity,$form->getData()->getPassword()));
             }else{
                 $entity->setPassword($oldPass);
             }
 
-            $em->flush();
+            $controllerService->save($entity);
 
-            $this->get('session')->getFlashBag()->add('title', $this->configs['singular_name']);
-            $this->get('session')->getFlashBag()->add('message', 'Registro editado com sucesso');
-
-            return $this->redirect($this->generateUrl($this->configs['prefix_route'] . '_edit', array('id' => $id)));
+            return $this->redirectToRoute($this->configs['prefix_route'] . '_edit', array('id' => $id));
         }
 
         return array(
-            'entity'      => $entity,
-            'form'   => $form->createView(),
-            'configs' => $this->configs
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'configs' => $this->configs,
+            'parent' => $this->parent,
+            'permissions' => $this->permissions,
+            'userPermissions' => $this->userPermissions
         );
     }
 
@@ -198,29 +133,20 @@ class UserController extends BaseController
      * @Route("/delete/{id}", name="fly_user_delete")
      * @Method("GET")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
-        //$form = $this->createDeleteForm($user);
-        //$form->handleRequest($request);
-
-        //if ($form->isSubmitted() && $form->isValid()) {
-            //$em = $this->getDoctrine()->getManager();
-            //$em->remove($user);
-            //$em->flush();
-        //}
-
-        return $this->redirectToRoute('user_index');
+        return parent::deleteAction($id);
     }
 
     /**
-     * Deletes a User entity.
+     * Deletes a Page entity.
      *
-     * @Route("/delete_all", name="fly_user_delete_all")
+     * @Route("/deleteAll", name="fly_user_delete_all")
      * @Method("POST")
      */
     public function deleteAllAction(Request $request)
     {
-        return $this->redirectToRoute('user_index');
+        return parent::deleteAllAction($request);
     }
 
     private function encondePassword($user, $plainPassword){

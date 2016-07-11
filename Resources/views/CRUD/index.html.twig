@@ -1,4 +1,4 @@
-{% extends 'FlyBundle:Template:base.html.twig' %}
+{% extends fly.base_template is defined ? fly.base_template : 'FlyBundle:Template:flyBase.html.twig' %}
 
 {% block body %}
 
@@ -9,6 +9,8 @@
             </li>
         </ul>
     {% endif %}
+
+    {% include 'FlyBundle:Helper:flashbag.html.twig' %}
 
     <div class="card">
         <div class="card-header">

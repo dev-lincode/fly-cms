@@ -1,0 +1,27 @@
+    protected $configs = [
+        'prefix_route' => '{{ route_name_prefix }}',
+        'singular_name' => '{{ entity_class }}',
+        'plural_name' => '{{ entity_class }}',
+        'entity' => '{{ bundle }}:{{ entity }}',
+        'entity_class' => '{{ namespace }}\Entity\{{ entity }}',
+        'entity_form' => '{{ namespace }}\Form\{{ entity }}Type',
+        'list_fields' => [
+
+        {%- for field, metadata in fields %}
+
+            "{{ field }}" => ["label" => "{{ field|capitalize }}"],
+
+        {%- endfor %}
+
+        ],
+        'show_fields' => [
+
+        {%- for field, metadata in fields %}
+
+            "{{ field }}" => ["label" => "{{ field|capitalize }}"],
+
+        {%- endfor %}
+
+        ]
+    ];
+

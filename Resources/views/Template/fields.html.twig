@@ -18,6 +18,14 @@
     {% endspaceless %}
 {% endblock submit_row %}
 
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% include 'FlyBundle:Fields:form_errors.html.twig' with { errors : errors } only %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
 {% block choice_widget_collapsed %}
     {% spaceless %}
         {% include 'FlyBundle:Fields:choice_widget_collapsed.html.twig' with { form : form } only %}

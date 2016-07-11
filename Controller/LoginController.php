@@ -18,7 +18,11 @@ class LoginController extends Controller
 	 * @Route("/login{trailingSlash}", name="cms_login", defaults={"trailingSlash": "/"}, requirements={ "trailingSlash": "[/]{0,1}" })
 	 */
 	public function loginAction() {
-		return $this->container->get('cms.login.service')->login();
+		$form = $this->container->get('cms.login.service')->login();
+
+		return $this->render('FlyBundle:Login:login.html.twig', [
+			'form' => $form->createView(),
+		]);
 	}
 	
 	/**

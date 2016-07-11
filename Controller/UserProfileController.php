@@ -42,28 +42,17 @@ class UserProfileController extends BaseController {
 	{
 		return parent::indexAction();
 	}
-	/**
-	 * Creates a new Page entity.
-	 *
-	 * @Route("/", name="fly_user_profile_create")
-	 * @Method("POST")
-	 * @Template("FlyBundle:UserProfile:new.html.twig")
-	 */
-	public function createAction(Request $request)
-	{
-		return parent::createAction($request);
-	}
 
 	/**
 	 * Displays a form to create a new Page entity.
 	 *
 	 * @Route("/new", name="fly_user_profile_new")
-	 * @Method("GET")
+	 * @Method({"GET", "POST"})
 	 * @Template("FlyBundle:UserProfile:new.html.twig")
 	 */
-	public function newAction()
+	public function newAction(Request $request)
 	{
-		return parent::newAction();
+		return parent::newAction($request);
 	}
 
 	/**
@@ -82,34 +71,23 @@ class UserProfileController extends BaseController {
 	 * Displays a form to edit an existing Page entity.
 	 *
 	 * @Route("/edit/{id}", name="fly_user_profile_edit")
-	 * @Method("GET")
+	 * @Method({"GET", "POST"})
 	 * @Template("FlyBundle:UserProfile:edit.html.twig")
 	 */
-	public function editAction($id)
+	public function editAction(Request $request, $id)
 	{
-		return parent::editAction($id);
+		return parent::editAction($request, $id);
 	}
-
-	/**
-	 * Edits an existing Page entity.
-	 *
-	 * @Route("/{id}", name="fly_user_profile_update")
-	 * @Method("PUT")
-	 * @Template("FlyBundle:UserProfile:edit.html.twig")
-	 */
-	public function updateAction(Request $request, $id)
-	{
-		return parent::updateAction($request, $id);
-	}
+	
 	/**
 	 * Deletes a Page entity.
 	 *
 	 * @Route("/delete/{id}", name="fly_user_profile_delete")
 	 * @Method("GET")
 	 */
-	public function deleteAction(Request $request, $id)
+	public function deleteAction($id)
 	{
-		return parent::deleteAction($request, $id);
+		return parent::deleteAction($id);
 	}
 	/**
 	 * Deletes a Page entity.
@@ -123,24 +101,23 @@ class UserProfileController extends BaseController {
 	}
 
 	protected function beforeDelete($entity){
-		$em = $this->getDoctrine()->getManager();
-		$results = $em->getRepository('FlyBundle:UserProfilePermission')->findBy(array('profile' => $entity->getId()));
+		$controllerService = $this->get('fly.controller.service');
+		$results = $controllerService->findBy('FlyBundle:UserProfilePermission', array('profile' => $entity->getId()));
 
 		foreach($results as $result){
-			$em->remove($result);
+			$controllerService->remove($result);
 		}
-		$em->flush();
 	}
 
-	protected function afterPersist($entity, $form, $method) {
+	protected function beforePersist($entity, $form, $method) {
 		$this->savePermissions($entity);
 	}
 
 	public function listPermissionsAction($id = null) {
 		$json = $this->permissionService->getJson();
 
-		$em = $this->getDoctrine()->getManager();
-		$listRoutes = $em->getRepository('FlyBundle:UserProfilePermission')->listRoutes($id);
+		$controllerService = $this->get('fly.controller.service');
+		$listRoutes = $controllerService->getRepository('FlyBundle:UserProfilePermission')->listRoutes($id);
 
 		$menuRoutes = array();
 		if(array_key_exists('menu', $json)) {
@@ -226,8 +203,8 @@ class UserProfileController extends BaseController {
 		$request = $this->container->get('request');
 		$routes  = $request->request->get("fly_profile_permission");
 
-		$em = $this->getDoctrine()->getManager();
-		$em->getRepository('FlyBundle:UserProfilePermission')->removeFromProfile($profile);
+		$controllerService = $this->get('fly.controller.service');
+		$controllerService->getRepository('FlyBundle:UserProfilePermission')->removeFromProfile($profile);
 
 		/* Como é administrador, não precisa inserir rotas */
 		if($profile->getAdministrator()) {
@@ -270,13 +247,13 @@ class UserProfileController extends BaseController {
 	}
 
 	private function addRoute($profile, $route, $params) {
-		$em = $this->getDoctrine()->getManager();
+		$controllerService = $this->get('fly.controller.service');
 
 		$userProfilePermission = new UserProfilePermission();
 		$userProfilePermission->setProfile($profile);
 		$userProfilePermission->setRoute($route);
 		$userProfilePermission->setParams($params);
 
-		$em->persist($userProfilePermission);
+		$controllerService->save($userProfilePermission);
 	}
 }

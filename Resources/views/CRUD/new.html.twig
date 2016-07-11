@@ -1,7 +1,9 @@
-{% extends 'FlyBundle:Template:base.html.twig' %}
-{% form_theme form 'FlyBundle:Template:fields.html.twig' %}
+{% extends fly.base_template is defined ? fly.base_template : 'FlyBundle:Template:flyBase.html.twig' %}
+{% form_theme form fly.form_template is defined ? fly.form_template : 'FlyBundle:Template:fields.html.twig' %}
 
 {% block body %}
+    {% include 'FlyBundle:Helper:flashbag.html.twig' %}
+
     <div class="card">
 
         {{ form_start(form, {'attr': { 'class' : 'form-horizontal', 'role': 'form'}}) }}

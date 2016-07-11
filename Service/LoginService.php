@@ -40,9 +40,7 @@ class LoginService extends Service {
 			$form->addError(new FormError("Usuário e/ou senha incorretas"));
 		}
 
-		return $this->render('FlyBundle:Login:login.html.twig', [
-			'form' => $form->createView(),
-		]);
+		return $form;
 	}
 
 	public function forceLogin(Member $member) {
