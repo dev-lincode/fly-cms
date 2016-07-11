@@ -20,3 +20,7 @@ services:
     fly.controller.service:
         class: Lincode\Fly\Bundle\Service\FlyControllerService
         arguments: ["@service_container"]
+
+    fly.form.service:
+        class: Lincode\Fly\Bundle\Service\EntityFormService
+        arguments: ["@service_container"]

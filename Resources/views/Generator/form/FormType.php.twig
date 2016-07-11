@@ -5,10 +5,8 @@ namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : ''
 {% block use_statements %}
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-{% if not configure_options_available %}
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-{% endif %}
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 {% endblock use_statements %}
 
 {% block class_definition %}
@@ -41,21 +39,6 @@ class {{ form_class }} extends AbstractType
     }
     {% endif %}
 
-    {%- if not configure_options_available %}
-
-    /**
-     * Sets the default options for this type.
-     *
-     * This method should be removed when upgrading to Symfony 2.7.
-     *
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-    {% endif %}
-
     /**
      * @param OptionsResolver $resolver
      */
@@ -66,16 +49,13 @@ class {{ form_class }} extends AbstractType
         ));
     }
 
-    {%- if get_name_required %}
-
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return '{{ form_type_name }}';
     }
-    {% endif %}
 
 {% endblock class_body %}
 }

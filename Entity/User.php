@@ -4,12 +4,14 @@ namespace Lincode\Fly\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
  *
  * @ORM\Table(name="fly_user")
  * @ORM\Entity()
+ * @UniqueEntity(fields={"email"},errorPath="email",message="Este Email ja esta em uso.")
  */
 class User implements AdvancedUserInterface {
     /**
@@ -48,7 +50,6 @@ class User implements AdvancedUserInterface {
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
-    private $confirmPassword;
 
     /**
      * @var string
@@ -126,7 +127,7 @@ class User implements AdvancedUserInterface {
     /**
      * @return boolean
      */
-    public function isIsActive() {
+    public function getIsActive() {
         return $this->isActive;
     }
 
@@ -207,7 +208,7 @@ class User implements AdvancedUserInterface {
         return $this->email;
     }
 
-    public function equals(UserInterface $user){
+    public function equals(AdvancedUserInterface $user){
         return $this->getId() == $user->getId();
     }
 
@@ -217,15 +218,6 @@ class User implements AdvancedUserInterface {
 
     public function getRoles() {
         return array('ROLE_CMS');
-    }
-
-    public function getConfirmPassword() {
-        return $this->confirmPassword;
-    }
-
-    public function setConfirmPassword($confirmPassword) {
-        $this->confirmPassword = $confirmPassword;
-        return $this;
     }
 
     public function isAccountNonExpired() {

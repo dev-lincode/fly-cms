@@ -3,6 +3,8 @@
 namespace Lincode\Fly\Bundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class LoginType extends AbstractType {
@@ -12,10 +14,9 @@ class LoginType extends AbstractType {
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('_username', 'email', ['label' => 'E-mail'])
-			->add('_password', 'password', ['label' => 'Senha']);
+			->add('_username', EmailType::class, ['label' => 'E-mail'])
+			->add('_password', PasswordType::class, ['label' => 'Senha']);
 	}
 
-	public function getName() {
-	}
+	public function getBlockPrefix() { }
 }

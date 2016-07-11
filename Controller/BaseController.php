@@ -48,12 +48,15 @@ abstract class BaseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->beforePersist($entity, $form, "new");
-            $controllerService->save($entity);
+            $formValidateService = $this->get('fly.form.service');
+            if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
+                $this->beforePersist($entity, $form, "new");
+                $controllerService->save($entity);
 
-            $this->get('session')->getFlashBag()->add('message', 'Novo registro adicionado com sucesso');
+                $this->get('session')->getFlashBag()->add('message', 'Novo registro adicionado com sucesso');
 
-            return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
+                return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
+            }
         }
 
         return array(
@@ -77,12 +80,15 @@ abstract class BaseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->beforePersist($entity, $form, "edit");
-            $controllerService->save($entity);
+            $formValidateService = $this->get('fly.form.service');
+            if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
+                $this->beforePersist($entity, $form, "edit");
+                $controllerService->save($entity);
 
-            $this->get('session')->getFlashBag()->add('message', 'Registro editado com sucesso');
+                $this->get('session')->getFlashBag()->add('message', 'Registro editado com sucesso');
 
-            return $this->redirectToRoute($this->configs['prefix_route'] . '_edit', array('id' => $id));
+                return $this->redirectToRoute($this->configs['prefix_route'] . '_edit', array('id' => $id));
+            }
         }
 
         return array(
@@ -132,7 +138,7 @@ abstract class BaseController extends Controller
     }
 
     public function getNewEntityForm(){
-        return new $this->configs['entity_form'];
+        return $this->configs['entity_form'];
     }
 
     protected function showResults(){

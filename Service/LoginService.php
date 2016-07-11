@@ -13,20 +13,20 @@ use Symfony\Component\Form\FormError;
 class LoginService extends Service {
 
 	private function getForm() {
-		$form = $this->createForm(new LoginType(), null, [
+		$form = $this->createForm(LoginType::class, null, [
 			'action' => $this->generateUrl('cms_login_check'),
 		]);
 
-		$session = $this->getRequest()->getSession();
-		$form->get('_username')->setData($session->get(SecurityContext::LAST_USERNAME));
-
+		$authenticationUtils = $this->container->get('security.authentication_utils');
+		$form->get('_username')->setData($authenticationUtils->getLastUsername());
+		
 		return $form;
 	}
 
 	private function getFormError() {
-		$session = $this->getRequest()->getSession();
-		$error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-		$session->remove(SecurityContext::AUTHENTICATION_ERROR);
+		$authenticationUtils = $this->container->get('security.authentication_utils');
+		$error = $authenticationUtils->getLastAuthenticationError();
+
 		if($error) {
 			return true;
 		}
@@ -41,15 +41,5 @@ class LoginService extends Service {
 		}
 
 		return $form;
-	}
-
-	public function forceLogin(Member $member) {
-		$request = $this->getRequest();
-
-		$token = new UsernamePasswordToken($member, $member->getPassword(), "restricted_area", $member->getRoles());
-		$this->container->get("security.context")->setToken($token);
-
-		$event = new InteractiveLoginEvent($request, $token);
-		$this->container->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 	}
 }

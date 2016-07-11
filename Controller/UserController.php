@@ -58,10 +58,13 @@ class UserController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entity->setPassword($this->encondePassword($entity,$form->getData()->getPassword()));
-            $controllerService->save($entity);
+            $formValidateService = $this->get('fly.form.service');
+            if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
+                $entity->setPassword($this->encondePassword($entity, $form->getData()->getPassword()));
+                $controllerService->save($entity);
 
-            return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
+                return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
+            }
         }
 
         return array(
@@ -105,16 +108,18 @@ class UserController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formValidateService = $this->get('fly.form.service');
+            if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
+                if ($form->getData()->getPassword() != '') {
+                    $entity->setPassword($this->encondePassword($entity, $form->getData()->getPassword()));
+                } else {
+                    $entity->setPassword($oldPass);
+                }
 
-            if($form->getData()->getPassword() != ''){
-                $entity->setPassword($this->encondePassword($entity,$form->getData()->getPassword()));
-            }else{
-                $entity->setPassword($oldPass);
+                $controllerService->save($entity);
+
+                return $this->redirectToRoute($this->configs['prefix_route'] . '_edit', array('id' => $id));
             }
-
-            $controllerService->save($entity);
-
-            return $this->redirectToRoute($this->configs['prefix_route'] . '_edit', array('id' => $id));
         }
 
         return array(

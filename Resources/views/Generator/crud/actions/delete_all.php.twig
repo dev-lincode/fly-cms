@@ -1,0 +1,23 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Delete All a {{ entity }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/deleteAll", name="{{ route_name_prefix }}_delete_all")
+     * @Method("POST")
+     *
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+
+    public function deleteAllAction(Request $request)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        return parent::deleteAllAction($request);
+{% endblock method_body %}
+    }

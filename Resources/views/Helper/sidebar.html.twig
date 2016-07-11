@@ -6,7 +6,7 @@
             </div>
 
             <div class="profile-info">
-                {{ app.security.token.user.name }}
+                {{ app.user.name }}
 
                 <i class="zmdi zmdi-caret-down"></i>
             </div>
@@ -14,7 +14,7 @@
 
         <ul class="main-menu">
             <li>
-                <a href="{{ path('fly_user_edit', { 'id': app.security.token.user.id }) }}"><i class="zmdi zmdi-settings"></i> Configurações</a>
+                <a href="{{ path('fly_user_edit', { 'id': app.user.id }) }}"><i class="zmdi zmdi-settings"></i> Configurações</a>
             </li>
             <li>
                 <a href="{{ path('cms_logout') }}"><i class="zmdi zmdi-time-restore"></i> Sair</a>
