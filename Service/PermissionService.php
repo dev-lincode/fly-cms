@@ -4,10 +4,10 @@ namespace Lincode\Fly\Bundle\Service;
 
 class PermissionService {
 
-	protected $container;
+	protected $flyConfig;
 
-	public function __construct($container) {
-		$this->container = $container;
+	public function __construct($flyConfig) {
+		$this->flyConfig = $flyConfig;
 	}
 
 	public function hasParams($entityParams, $params) {
@@ -26,7 +26,7 @@ class PermissionService {
 
 	public function getJson() {
 
-		$json = json_decode(file_get_contents( $this->container->get('kernel')->getRootDir() . "/../src/CMS/config.json"), true);
+		$json = json_decode(file_get_contents( $this->flyConfig['menu_config']), true);
 		if($json === NULL) {
 			throw new \Exception('CONFIG JSON - ' . $this->getJsonError());
 		}

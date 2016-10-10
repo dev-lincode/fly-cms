@@ -9,12 +9,10 @@ use Lincode\Fly\Bundle\Service\PermissionService;
 
 class BeforeControllerListener {
 
-	protected $container;
 	protected $permissionService;
 
-	public function __construct($container) {
-		$this->container = $container;
-		$this->permissionService = $this->container->get('cms.permissions.service');
+	public function __construct($permissionService) {
+		$this->permissionService = $permissionService;
 	}
 
 	public function onKernelController(FilterControllerEvent $event) {

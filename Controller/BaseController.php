@@ -52,6 +52,7 @@ abstract class BaseController extends Controller
             if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
                 $this->beforePersist($entity, $form, "new");
                 $controllerService->save($entity);
+                $this->afterPersist($entity, $form, "new");
 
                 $this->get('session')->getFlashBag()->add('message', 'Novo registro adicionado com sucesso');
 
@@ -84,6 +85,7 @@ abstract class BaseController extends Controller
             if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
                 $this->beforePersist($entity, $form, "edit");
                 $controllerService->save($entity);
+                $this->afterPersist($entity, $form, "edit");
 
                 $this->get('session')->getFlashBag()->add('message', 'Registro editado com sucesso');
 
@@ -182,5 +184,6 @@ abstract class BaseController extends Controller
     }
 
     protected function beforePersist($entity, $form, $method) {}
+    protected function afterPersist($entity, $form, $method) {}
     protected function beforeDelete($entity) {}
 }

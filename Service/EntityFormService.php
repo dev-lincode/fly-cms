@@ -2,13 +2,20 @@
 
 namespace Lincode\Fly\Bundle\Service;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class EntityFormService extends Service {
+class EntityFormService {
+
+    private $om;
+
+    public function __construct(ObjectManager $om) {
+        $this->om = $om;
+    }
+
     public function validadeForm($form, $repository, $entity) {
-        $em = $this->getDoctrine()->getManager();
-        $metadata = $em->getClassMetadata($repository);
+        $metadata = $this->om->getClassMetadata($repository);
 
         $fields = $metadata->getFieldNames();
         foreach($fields as $field) {
@@ -33,7 +40,7 @@ class EntityFormService extends Service {
                     if(gettype($entity->$getField()) == 'string' && $entity->$getField() == "@#REMOVE#@") {
                         $error = true;
                     } else {
-                        $old = $em->getUnitOfWork()->getOriginalEntityData($entity);
+                        $old = $this->om->getUnitOfWork()->getOriginalEntityData($entity);
                         if(is_array($old) && array_key_exists($field, $old) && is_null($entity->$getField())) {
                             continue;
                         }
@@ -49,7 +56,7 @@ class EntityFormService extends Service {
 
             if(!is_null($entity->$getField())) {
                 if($map['unique']) {
-                    $qb = $em->getRepository($repository)->createQueryBuilder('e');
+                    $qb = $this->om->getRepository($repository)->createQueryBuilder('e');
                     $qb->where('e.' . $field . ' = :key')->setParameter('key', $entity->$getField());
 
                     if($entity->getId()) {
@@ -103,7 +110,7 @@ class EntityFormService extends Service {
 
                 if($map['type'] == 'array') {
                     if($form->get($field)->getConfig()->getType()->getName() == 'gallery') {
-                        $old = $em->getUnitOfWork()->getOriginalEntityData($entity);
+                        $old = $this->om->getUnitOfWork()->getOriginalEntityData($entity);
                         if(array_key_exists($field, $old) && !is_null($old[$field]) && is_array($entity->$getField())) {
                             foreach($old[$field] as $oldField) {
                                 if($oldField && !in_array($oldField, $entity->$getField()) && file_exists($oldField)) {
@@ -128,7 +135,7 @@ class EntityFormService extends Service {
                     $subEntity = $entity->$getField();
                     $subForm = $form->get($association['fieldName']);
 
-                    if(!$this-validadeForm($subForm, $association['targetEntity'], $subEntity)) {
+                    if(!$this->validadeForm($subForm, $association['targetEntity'], $subEntity)) {
                         return false;
                     }
                 }
@@ -156,8 +163,7 @@ class EntityFormService extends Service {
     }
 
     public function loadFieldsType($formType, &$listFields, $repository) {
-        $em = $this->getDoctrine()->getManager();
-        $metadata = $em->getClassMetadata($repository);
+        $metadata = $this->om->getClassMetadata($repository);
         $associationMappings = $metadata->getAssociationMappings();
 
         $form = $this->getContainer()->get('form.factory')->create($formType, null, array());
@@ -182,8 +188,7 @@ class EntityFormService extends Service {
     }
 
     public function isDeletable($repository, $entity) {
-        $em = $this->getDoctrine()->getManager();
-        $metadata = $em->getClassMetadata($repository);
+        $metadata = $this->om->getClassMetadata($repository);
 
         $associationMappings = $metadata->getAssociationMappings();
         foreach($associationMappings as $association) {
@@ -198,7 +203,7 @@ class EntityFormService extends Service {
                     else if($association['inversedBy'])
                         $dql .= "WHERE e." . $association['inversedBy'] . " = ?1";
 
-                    $query = $em->createQuery($dql);
+                    $query = $this->om->createQuery($dql);
                     $query->setParameter(1, $entity);
 
                     if($query->getSingleScalarResult() > 0) {

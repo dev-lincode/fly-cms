@@ -3,24 +3,25 @@ services:
         class: Lincode\Fly\Bundle\EventListener\BeforeControllerListener
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
-        arguments: ["@service_container"]
+        arguments: ["@cms.permissions.service"]
 
     cms.permissions.service:
             class: Lincode\Fly\Bundle\Service\PermissionService
-            arguments: ["@service_container"]
+            arguments: ["%fly%"]
 
     cms.login.service:
         class: Lincode\Fly\Bundle\Service\LoginService
-        arguments: ["@service_container"]
+        arguments: ["@security.authentication_utils", "@form.factory", "@router"]
+        scope: request
 
     fly.navegation.service:
         class: Lincode\Fly\Bundle\Service\NavegationService
-        arguments: ["@service_container"]
+        arguments: ["%fly%"]
 
     fly.controller.service:
         class: Lincode\Fly\Bundle\Service\FlyControllerService
-        arguments: ["@service_container"]
+        arguments: ["@doctrine.orm.entity_manager", "@form.factory"]
 
     fly.form.service:
         class: Lincode\Fly\Bundle\Service\EntityFormService
-        arguments: ["@service_container"]
+        arguments: ["@doctrine.orm.entity_manager"]

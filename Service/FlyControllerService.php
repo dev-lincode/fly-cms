@@ -2,15 +2,23 @@
 
 namespace Lincode\Fly\Bundle\Service;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Yaml\Yaml;
 
-class FlyControllerService extends Service
+class FlyControllerService
 {
+    private $om;
+    private $formFactory;
+
+    public function __construct(ObjectManager $om, FormFactory $formFactory) {
+        $this->om = $om;
+        $this->formFactory = $formFactory;
+    }
 
     public function getRepository($repository){
-        $em = $this->getDoctrine()->getManager();
-        return $em->getRepository($repository);
+        return $this->om->getRepository($repository);
     }
 
     public function findAll($repository){
@@ -26,7 +34,7 @@ class FlyControllerService extends Service
     }
 
     public function getForm($formType, $entity, $route){
-        $form = $this->createForm($formType, $entity, array(
+        $form = $this->formFactory->createNamed('fly_form', $formType, $entity, array(
 			'action' => $route,
 			'method' => 'POST',
 		));
@@ -37,31 +45,27 @@ class FlyControllerService extends Service
 
     public function save($objects){
 
-        $em = $this->getDoctrine()->getManager();
-
         if(is_array($objects)){
             foreach ($objects as $object){
-                $em->persist($object);
+                $this->om->persist($object);
             }
         }else{
-            $em->persist($objects);
+            $this->om->persist($objects);
         }
 
-        $em->flush();
+        $this->om->flush();
     }
 
     public function remove($objects){
 
-        $em = $this->getDoctrine()->getManager();
-
         if(is_array($objects)){
             foreach ($objects as $object){
-                $em->remove($object);
+                $this->om->remove($object);
             }
         }else{
-            $em->remove($objects);
+            $this->om->remove($objects);
         }
 
-        $em->flush();
+        $this->om->flush();
     }
 }

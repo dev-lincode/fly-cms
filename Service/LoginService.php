@@ -5,27 +5,39 @@ namespace Lincode\Fly\Bundle\Service;
 use Lincode\Fly\Bundle\Entity\User;
 use Lincode\Fly\Bundle\Form\LoginType;
 
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Form\FormError;
 
-class LoginService extends Service {
+class LoginService
+{
+    private $authenticationUtils;
+    private $formFactory;
+    private $router;
 
-	private function getForm() {
-		$form = $this->createForm(LoginType::class, null, [
-			'action' => $this->generateUrl('cms_login_check'),
+    public function __construct(AuthenticationUtils $authenticationUtils, FormFactory $formFactory, Router $router)
+    {
+        $this->authenticationUtils = $authenticationUtils;
+        $this->formFactory = $formFactory;
+        $this->router = $router;
+    }
+
+    private function getForm() {
+		$form = $this->formFactory->createNamed(null, LoginType::class, null, [
+			'action' => $this->router->generate('cms_login_check'),
 		]);
 
-		$authenticationUtils = $this->container->get('security.authentication_utils');
-		$form->get('_username')->setData($authenticationUtils->getLastUsername());
+		$form->get('_username')->setData($this->authenticationUtils->getLastUsername());
 		
 		return $form;
 	}
 
 	private function getFormError() {
-		$authenticationUtils = $this->container->get('security.authentication_utils');
-		$error = $authenticationUtils->getLastAuthenticationError();
+		$error = $this->authenticationUtils->getLastAuthenticationError();
 
 		if($error) {
 			return true;

@@ -109,7 +109,7 @@ class UserProfileController extends BaseController {
 		}
 	}
 
-	protected function beforePersist($entity, $form, $method) {
+	protected function afterPersist($entity, $form, $method) {
 		$this->savePermissions($entity);
 	}
 
