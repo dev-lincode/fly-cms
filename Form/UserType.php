@@ -20,7 +20,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('profile', null, ['label' => 'Perfil', 'required' => false])
+            ->add('profile', null, ['label' => 'Perfil', 'required' => false, 'placeholder' => 'Selecione um perfil'])
             ->add('name', TextType::class, ['label' => 'Nome', 'required' => true])
             ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
             ->add('password', RepeatedType::class, ['type' => PasswordType::class,
