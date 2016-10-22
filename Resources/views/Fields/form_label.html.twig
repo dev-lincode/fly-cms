@@ -1,0 +1,11 @@
+{% if form.vars.required %}
+    {% if label_attr.class is defined %}
+        {% set label_attr = label_attr | merge({ 'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% else %}
+        {% set label_attr = label_attr | merge({ 'class':  'required'}) %}
+    {% endif %}
+{% endif %}
+
+<label for="{{ form.vars.id }}" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+    {{ form.vars.label }}{{ form.vars.required ? "*" }}
+</label>

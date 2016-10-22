@@ -31,3 +31,9 @@
         {% include 'FlyBundle:Fields:choice_widget_collapsed.html.twig' with { form : form } only %}
     {% endspaceless %}
 {% endblock choice_widget_collapsed %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:form_label.html.twig' with { form : form, label_attr : label_attr } only %}
+    {% endspaceless %}
+{% endblock form_label %}

@@ -30,20 +30,22 @@
                         {% if value.type is defined %}
                             <th class="col-md-3">{{ value.label }}</th>
                             <td class="col-md-9">
-                                {% if attribute(entity, field) %}
-                                    {% if value.type == 'date'  %}
-                                        {{ attribute(entity, field) | date('d/m/Y') }}
-                                    {% elseif value.type == 'boolean' %}
-                                        <i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i>
-                                    {% elseif value.type == 'image' %}
-                                        <img height="100" src="{{ asset(value.path ~ '/' ~ attribute(entity, field)) }}" />
-                                    {% else %}
-                                        {{ attribute(entity, field) }}
-                                    {% endif %}
+                                {% if value.type == 'date'  %}
+                                    {{ attribute(entity, field) | date('d/m/Y') }}
+                                {% elseif value.type == 'boolean' %}
+                                    <i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i>
+                                {% elseif value.type == 'image' %}
+                                    <img height="100" src="{{ asset(value.path ~ '/' ~ attribute(entity, field)) }}" />
+                                {% else %}
+                                    {{ attribute(entity, field) }}
                                 {% endif %}
                             </td>
                         {% else %}
-                            <th class="col-md-2">{{ value }}</th>
+                            {% if value.label is defined %}
+                                <th class="col-md-2">{{ value.label }}</th>
+                            {% else %}
+                                <th class="col-md-2">{{ value }}</th>
+                            {% endif %}
                             <td class="col-md-10">{{ attribute(entity, field) }}</td>
                         {% endif %}
                     </tr>
