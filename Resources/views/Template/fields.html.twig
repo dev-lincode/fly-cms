@@ -37,3 +37,32 @@
         {% include 'FlyBundle:Fields:form_label.html.twig' with { form : form, label_attr : label_attr } only %}
     {% endspaceless %}
 {% endblock form_label %}
+
+{% block date_widget %}
+    {% spaceless %}
+
+        <input type="hidden" class="{{ form.vars.id}}_year" name="{{ form.vars.full_name}}[year]" value="{{ form.vars.value.year }}">
+        <input type="hidden" class="{{ form.vars.id}}_month" name="{{ form.vars.full_name}}[month]" value="{{ form.vars.value.month }}">
+        <input type="hidden" class="{{ form.vars.id}}_day" name="{{ form.vars.full_name}}[day]" value="{{ form.vars.value.day }}">
+
+        <div class="input-group ">
+            {% if form.vars.value and form.vars.value.day %}
+                {% set dataAtual = "%02d"|format(form.vars.value.day) ~ "/" ~ "%02d"|format(form.vars.value.month)  ~ "/" ~ form.vars.value.year %}
+            {% else %}
+                {% set dataAtual = null %}
+            {% endif %}
+
+            <div class="dtp-container">
+                <input type="text" id="{{ form.vars.id}}" class="form-control date-picker"  value="{{ dataAtual }}" placeholder="Clique Aqui...">
+            </div>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                jQuery('#{{ form.vars.id}}').change(function(){
+                    console.log($(this).val());
+                });
+            });
+        </script>
+        {{ form_errors(form) }}
+    {% endspaceless %}
+{% endblock date_widget %}

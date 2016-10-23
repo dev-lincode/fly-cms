@@ -26,7 +26,7 @@ class PermissionService {
 
 	public function getJson() {
 
-		$json = json_decode(file_get_contents( $this->flyConfig['menu_config']), true);
+		$json = json_decode(file_get_contents( $this->flyConfig['navegation']), true);
 		if($json === NULL) {
 			throw new \Exception('CONFIG JSON - ' . $this->getJsonError());
 		}
