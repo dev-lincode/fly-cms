@@ -66,3 +66,9 @@
         {{ form_errors(form) }}
     {% endspaceless %}
 {% endblock date_widget %}
+
+{% block collection_widget %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:collection_widget.html.twig' with { form : form, disabled : disabled } only %}
+    {% endspaceless %}
+{% endblock collection_widget %}    
