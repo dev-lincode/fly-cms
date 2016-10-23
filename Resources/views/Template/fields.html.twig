@@ -37,3 +37,9 @@
         {% include 'FlyBundle:Fields:form_label.html.twig' with { form : form, label_attr : label_attr } only %}
     {% endspaceless %}
 {% endblock form_label %}
+
+{% block collection_widget %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:collection_widget.html.twig' with { form : form, disabled : disabled } only %}
+    {% endspaceless %}
+{% endblock collection_widget %}

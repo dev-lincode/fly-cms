@@ -13730,6 +13730,7 @@ input:focus {
   -moz-appearance: none;
   appearance: none;
   padding: 0;
+  background: transparent;
 }
 
 .form-control:not(.fc-alt).auto-size {

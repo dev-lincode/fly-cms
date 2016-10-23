@@ -1,0 +1,63 @@
+{{ form_widget(form, { 'attr': {'data-prototype': form_row(form.vars.prototype) }}) }}
+
+<style>
+    #{{ form.vars.id }}{
+        display: block;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    #{{ form.vars.id }} .collection.multiple{
+        margin-bottom: 10px;
+        padding: 10px 10px 0;
+    }
+
+    #{{ form.vars.id }} .collection.multiple:nth-child(odd){
+        background: rgba(244, 244, 244, 0.8);
+    }
+
+</style>
+<div>
+    <button type="button" id="{{ form.vars.id }}_btn" class="btn multiple"><i class="fa fa-plus"></i> Adicionar novo </button>
+</div>
+<script type="text/javascript">
+    var {{ form.vars.id }}_count = '{{ form|length }}';
+    jQuery(document).ready(function() {
+        jQuery('#{{ form.vars.id }}_btn').click(function(e) {
+            e.preventDefault();
+            var list = jQuery('#{{ form.vars.id }}');
+
+            // grab the prototype template
+            var newWidget = list.attr('data-prototype');
+            newWidget = newWidget.replace(/__name__/g, {{ form.vars.id }}_count);
+            {{ form.vars.id }}_count++;
+
+            // create a new list element and add it to the list
+            var newLi = jQuery('<div class="collection multiple col-sm-12"></div>').html(newWidget).hide();
+            newLi.appendTo(list).slideDown('fast');
+
+            list.children().each(function() {
+                {{ form.vars.id }}_delete_form(jQuery(this));
+            });
+        });
+
+        jQuery('#{{ form.vars.id }}').children('.form-group').each(function() {
+            var $newLi = jQuery('<div class="collection multiple col-sm-12"></div>');
+            jQuery(this).parent().append($newLi);
+            $newLi.prepend(jQuery(this));
+
+            {{ form.vars.id }}_delete_form($newLi);
+        });
+    });
+
+    function {{ form.vars.id }}_delete_form($subform) {
+        var $removeForm = jQuery('<a style="float: right; color: red; margin-top: -40px; cursor: pointer; position: relative; z-index: 9;" class="collection delete"><i class="fa fa-trash-o"></i> Remover</a>');
+        $subform.find(".collection.delete").remove();
+        $subform.append($removeForm);
+
+        $removeForm.on('click', function(e) {
+            e.preventDefault();
+            $subform.remove();
+        });
+    }
+</script>
