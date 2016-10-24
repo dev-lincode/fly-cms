@@ -53,9 +53,7 @@ abstract class BaseController extends Controller
                 $this->beforePersist($entity, $form, "new");
                 $controllerService->save($entity);
                 $this->afterPersist($entity, $form, "new");
-
                 $this->get('session')->getFlashBag()->add('message', 'Novo registro adicionado com sucesso');
-
                 return $this->redirectToRoute($this->configs['prefix_route'] . '_show', array('id' => $entity->getId()));
             }
         }

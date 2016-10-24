@@ -39,6 +39,10 @@
             list.children().each(function() {
                 {{ form.vars.id }}_delete_form(jQuery(this));
             });
+
+            if(jQuery('.selectpicker').length > 0){
+                $('.selectpicker').selectpicker();
+            }
         });
 
         jQuery('#{{ form.vars.id }}').children('.form-group').each(function() {

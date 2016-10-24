@@ -25,3 +25,7 @@ services:
     fly.form.service:
         class: Lincode\Fly\Bundle\Service\EntityFormService
         arguments: ["@doctrine.orm.entity_manager"]
+
+    fly.upload.service:
+        class: Lincode\Fly\Bundle\Service\UploadService
+        arguments: ["@doctrine.orm.entity_manager", "%fly%"]

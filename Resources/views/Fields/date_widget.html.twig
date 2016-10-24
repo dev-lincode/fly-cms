@@ -1,0 +1,32 @@
+<input type="hidden" id="{{ form.vars.id}}_year" name="{{ form.vars.full_name}}[year]" value="{{ form.vars.value.year }}">
+<input type="hidden" id="{{ form.vars.id}}_month" name="{{ form.vars.full_name}}[month]" value="{{ form.vars.value.month }}">
+<input type="hidden" id="{{ form.vars.id}}_day" name="{{ form.vars.full_name}}[day]" value="{{ form.vars.value.day }}">
+
+<div class="input-group ">
+    {% if form.vars.value and form.vars.value.day %}
+        {% set dataAtual = "%02d"|format(form.vars.value.day) ~ "/" ~ "%02d"|format(form.vars.value.month)  ~ "/" ~ form.vars.value.year %}
+    {% else %}
+        {% set dataAtual = null %}
+    {% endif %}
+
+    <div class="dtp-container">
+        <input type="text" id="{{ form.vars.id}}" class="form-control date-picker"  value="{{ dataAtual }}" placeholder="Clique Aqui...">
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('#{{ form.vars.id}}').datetimepicker({
+            format: 'DD/MM/YYYY',
+            locale: 'pt-br'
+        });
+
+        jQuery('#{{ form.vars.id}}').on('dp.change', function(e){
+            var date = e.date;
+
+            jQuery('#{{ form.vars.id}}_day').val(date.format('DD'));
+            jQuery('#{{ form.vars.id}}_month').val(date.format('MM'));
+            jQuery('#{{ form.vars.id}}_year').val(date.format('YYYY'));
+        });
+    });
+</script>
+{{ form_errors(form) }}
