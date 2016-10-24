@@ -64,10 +64,11 @@
             <span class="btn btn-primary btn-file m-r-10">
                 <span class="fileinput-new">Selecione o arquivo</span>
                 <span class="fileinput-exists">Alterar</span>
-                <input type="file" name="{{ form.vars.full_name }}">
+                <input type="file" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ block('widget_attributes') }}>
             </span>
             <span class="fileinput-filename"></span>
             <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
         </div>
+
     {% endspaceless %}
 {% endblock file_widget %}
