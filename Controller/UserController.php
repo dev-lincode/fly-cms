@@ -154,7 +154,8 @@ class UserController extends BaseController
         return parent::deleteAllAction($request);
     }
 
-    private function encondePassword($user, $plainPassword){
+    private function encondePassword($user, $plainPassword)
+    {
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
         return $encoder->encodePassword($plainPassword, $user->getSalt());
     }

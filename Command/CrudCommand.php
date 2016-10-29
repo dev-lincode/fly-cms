@@ -6,7 +6,8 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCrudCommand;
 use Lincode\Fly\Bundle\Generator\DoctrineCrudGenerator;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
-class CrudCommand extends GenerateDoctrineCrudCommand {
+class CrudCommand extends GenerateDoctrineCrudCommand
+{
     protected $generator;
 
     protected function configure()
@@ -21,7 +22,7 @@ class CrudCommand extends GenerateDoctrineCrudCommand {
     {
         if (null === $this->generator) {
             $this->generator = $this->createGenerator();
-            $this->generator->setSkeletonDirs( __DIR__.'/../Resources/views/Generator/' );
+            $this->generator->setSkeletonDirs(__DIR__ . '/../Resources/views/Generator/');
         }
 
         return $this->generator;
@@ -29,6 +30,6 @@ class CrudCommand extends GenerateDoctrineCrudCommand {
 
     protected function createGenerator()
     {
-        return new DoctrineCrudGenerator($this->getContainer()->get('filesystem'), __DIR__.'/../Resources/views/Generator/' );
+        return new DoctrineCrudGenerator($this->getContainer()->get('filesystem'), __DIR__ . '/../Resources/views/Generator/');
     }
 }

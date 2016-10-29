@@ -26,32 +26,35 @@ class LoginService
         $this->router = $router;
     }
 
-    private function getForm() {
-		$form = $this->formFactory->createNamed(null, LoginType::class, null, [
-			'action' => $this->router->generate('cms_login_check'),
-		]);
+    private function getForm()
+    {
+        $form = $this->formFactory->createNamed(null, LoginType::class, null, [
+            'action' => $this->router->generate('cms_login_check'),
+        ]);
 
-		$form->get('_username')->setData($this->authenticationUtils->getLastUsername());
-		
-		return $form;
-	}
+        $form->get('_username')->setData($this->authenticationUtils->getLastUsername());
 
-	private function getFormError() {
-		$error = $this->authenticationUtils->getLastAuthenticationError();
+        return $form;
+    }
 
-		if($error) {
-			return true;
-		}
-		return false;
-	}
+    private function getFormError()
+    {
+        $error = $this->authenticationUtils->getLastAuthenticationError();
 
-	public function login() {
-		$form = $this->getForm();
+        if ($error) {
+            return true;
+        }
+        return false;
+    }
 
-		if($this->getFormError()) {
-			$form->addError(new FormError("Usuário e/ou senha incorretas"));
-		}
+    public function login()
+    {
+        $form = $this->getForm();
 
-		return $form;
-	}
+        if ($this->getFormError()) {
+            $form->addError(new FormError("Usuário e/ou senha incorretas"));
+        }
+
+        return $form;
+    }
 }

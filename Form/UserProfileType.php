@@ -10,25 +10,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserProfileType extends AbstractType
 {
-	/**
-	 * @param FormBuilderInterface $builder
-	 * @param array $options
-	 */
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder
-			->add('name', TextType::class, ["label" => "Nome"])
-			->add('administrator', CheckboxType::class,["label" => "É administrador?", "required" => false])
-		;
-	}
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name', TextType::class, ["label" => "Nome"])
+            ->add('administrator', CheckboxType::class, ["label" => "É administrador?", "required" => false])
+        ;
+    }
 
-	/**
-	 * @param OptionsResolver $resolver
-	 */
-	public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults(array(
-			'data_class' => 'Lincode\Fly\Bundle\Entity\UserProfile'
-		));
-	}
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Lincode\Fly\Bundle\Entity\UserProfile'
+        ));
+    }
 }

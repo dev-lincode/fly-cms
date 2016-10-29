@@ -6,7 +6,8 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateBundleCommand;
 use Lincode\Fly\Bundle\Generator\BundleGenerator;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
-class BundleCommand extends GenerateBundleCommand {
+class BundleCommand extends GenerateBundleCommand
+{
     protected $generator;
 
     protected function configure()
@@ -21,7 +22,7 @@ class BundleCommand extends GenerateBundleCommand {
     {
         if (null === $this->generator) {
             $this->generator = $this->createGenerator();
-            $this->generator->setSkeletonDirs( __DIR__.'/../Resources/views/Generator/' );
+            $this->generator->setSkeletonDirs(__DIR__ . '/../Resources/views/Generator/');
         }
 
         return $this->generator;

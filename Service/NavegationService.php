@@ -10,20 +10,20 @@ class NavegationService extends Service
 
     public function __construct($container)
     {
-        if($container->hasParameter('fly')){
+        if ($container->hasParameter('fly')) {
             $flyConfigs = $container->getParameter('fly');
-            if(isset($flyConfigs['navegation'])){
+            if (isset($flyConfigs['navegation'])) {
                 $this->navegationFile = $flyConfigs['navegation'];
             }
         }
 
         parent::__construct($container);
-
     }
 
-    public function loadFile(){
+    public function loadFile()
+    {
         $navegation = null;
-        if($this->navegationFile){
+        if ($this->navegationFile) {
             $navegation = Yaml::parse(file_get_contents($this->navegationFile));
         }
 

@@ -43,16 +43,10 @@ class BundleGenerator extends Base
 
         // render the services.yml/xml file
         $servicesFilename = $bundle->getServicesConfigurationFilename();
-        $this->renderFile(
-            sprintf('bundle/%s.twig', $servicesFilename),
-            $dir.'/Resources/config/'.$servicesFilename, $parameters
-        );
+        $this->renderFile(sprintf('bundle/%s.twig', $servicesFilename), $dir.'/Resources/config/'.$servicesFilename, $parameters);
 
         if ($routingFilename = $bundle->getRoutingConfigurationFilename()) {
-            $this->renderFile(
-                sprintf('bundle/%s.twig', $routingFilename),
-                $dir.'/Resources/config/'.$routingFilename, $parameters
-            );
+            $this->renderFile(sprintf('bundle/%s.twig', $routingFilename), $dir.'/Resources/config/'.$routingFilename, $parameters);
         }
     }
 }

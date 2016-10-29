@@ -15,27 +15,30 @@ class UploadService
         $this->paramters = $paramters;
     }
 
-    private function needUploadFile($entity, $field) {
-        if(is_null($entity) || is_null($field)) {
+    private function needUploadFile($entity, $field)
+    {
+        if (is_null($entity) || is_null($field)) {
             return false;
         }
 
         $getter = "get" . ucwords($field);
         $setter = "set" . ucwords($field);
 
-        if(!is_callable(array($entity, $getter)) || !is_callable(array($entity, $setter))) {
+        if (!is_callable(array($entity, $getter)) || !is_callable(array($entity, $setter))) {
             return false;
         }
 
-        if(gettype($entity->$getter()) != "object" || get_class($entity->$getter()) != "Symfony\Component\HttpFoundation\File\UploadedFile") {
-            if(gettype($entity->$getter()) == 'string' && $entity->$getter() == "@#REMOVE#@") {
+        if (gettype($entity->$getter()) != "object" ||
+            get_class($entity->$getter()) != "Symfony\Component\HttpFoundation\File\UploadedFile") {
+            if (gettype($entity->$getter()) == 'string' && $entity->$getter() == "@#REMOVE#@") {
                 $entity->$setter(null);
                 $oldField = $this->getOldValue($entity, $field);
-                if($oldField && file_exists($oldField))
+                if ($oldField && file_exists($oldField)) {
                     unlink($oldField);
+                }
             } else {
                 $old = $this->om->getUnitOfWork()->getOriginalEntityData($entity);
-                if(is_array($old) && array_key_exists($field, $old) && is_null($entity->$getter())) {
+                if (is_array($old) && array_key_exists($field, $old) && is_null($entity->$getter())) {
                     $entity->$setter($old[$field]);
                 }
             }
@@ -45,8 +48,9 @@ class UploadService
         return true;
     }
 
-    public function generateFileName($file, $originalName) {
-        if(!$originalName) {
+    public function generateFileName($file, $originalName)
+    {
+        if (!$originalName) {
             $originalName = explode('.', $file->getClientOriginalName());
             $fileName = md5(uniqid()) . "." . end($originalName);
         } else {
@@ -55,32 +59,39 @@ class UploadService
         return $fileName;
     }
 
-    public function getOldValue($entity, $field) {
+    public function getOldValue($entity, $field)
+    {
         $old = $this->om->getUnitOfWork()->getOriginalEntityData($entity);
 
-        if(is_array($old) && array_key_exists($field, $old) && !is_null($old[$field])) {
+        if (is_array($old) && array_key_exists($field, $old) && !is_null($old[$field])) {
             return $old[$field];
         }
+
         return null;
     }
 
-    public function moveFile($file, $destiny, $fileName) {
+    public function moveFile($file, $destiny, $fileName)
+    {
         $path = $this->paramters['upload_path'] . '/'  . $destiny;
 
-        if(!file_exists($path))
+        if (!file_exists($path)) {
             mkdir($path, 0777, true);
+        }
 
         $file->move($path, $fileName);
         chmod($path . $fileName, 0777);
     }
 
-    public function uploadFile($entity, $field, $destiny, $originalName = false) {
-        if(is_null($destiny) || !$this->needUploadFile($entity, $field)) {
+    public function uploadFile($entity, $field, $destiny, $originalName = false)
+    {
+        if (is_null($destiny) || !$this->needUploadFile($entity, $field)) {
             return false;
         }
 
-        if(substr($destiny, -1) != "/")
+        if (substr($destiny, -1) != "/") {
             $destiny .= "/";
+        }
+
 
         $getter = "get" . ucwords($field);
         $setter = "set" . ucwords($field);
@@ -93,8 +104,9 @@ class UploadService
         $entity->$setter($destiny . $fileName);
 
         $oldField = $this->getOldValue($entity, $field);
-        if($oldField && file_exists($oldField))
+        if ($oldField && file_exists($oldField)) {
             unlink($oldField);
+        }
 
         return true;
     }

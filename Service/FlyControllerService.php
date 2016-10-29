@@ -12,57 +12,65 @@ class FlyControllerService
     private $om;
     private $formFactory;
 
-    public function __construct(ObjectManager $om, FormFactory $formFactory) {
+    public function __construct(ObjectManager $om, FormFactory $formFactory)
+    {
         $this->om = $om;
         $this->formFactory = $formFactory;
     }
 
-    public function getRepository($repository){
+    public function getRepository($repository)
+    {
         return $this->om->getRepository($repository);
     }
 
-    public function findAll($repository){
+    public function findAll($repository)
+    {
         return $this->getRepository($repository)->findAll();
     }
 
-    public function find($repository, $filter = array()){
+    public function find($repository, $filter = array())
+    {
         return $this->getRepository($repository)->findOneBy($filter);
     }
 
-    public function findBy($repository, $filter = array()){
+    public function findBy($repository, $filter = array())
+    {
         return $this->getRepository($repository)->findBy($filter);
     }
 
-    public function getForm($formType, $entity, $route){
+    public function getForm($formType, $entity, $route)
+    {
         $form = $this->formFactory->createNamed('fly_form', $formType, $entity, array(
-			'action' => $route,
-			'method' => 'POST',
-		));
+            'action' => $route,
+            'method' => 'POST',
+        ));
 
         $form->add('submit', SubmitType::class, ['label' => 'Salvar', 'attr' => ['class' => 'btn btn-success']]);
         return $form;
     }
 
-    public function save($objects){
+    public function save($objects)
+    {
 
-        if(is_array($objects)){
-            foreach ($objects as $object){
+        if (is_array($objects)) {
+            foreach ($objects as $object) {
                 $this->om->persist($object);
             }
-        }else{
+        } else {
             $this->om->persist($objects);
         }
 
         $this->om->flush();
     }
 
-    public function remove($objects){
+    public function remove($objects)
+    {
 
-        if(is_array($objects)){
-            foreach ($objects as $object){
+        if (is_array($objects)) {
+            foreach ($objects as $object) {
                 $this->om->remove($object);
             }
-        }else{
+        } else {
             $this->om->remove($objects);
         }
 

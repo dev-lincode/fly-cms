@@ -7,137 +7,142 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Lincode\Fly\Bundle\Service\PermissionService;
 
-class BeforeControllerListener {
+class BeforeControllerListener
+{
+    protected $permissionService;
 
-	protected $permissionService;
+    public function __construct($permissionService)
+    {
+        $this->permissionService = $permissionService;
+    }
 
-	public function __construct($permissionService) {
-		$this->permissionService = $permissionService;
-	}
+    public function onKernelController(FilterControllerEvent $event)
+    {
+        $controller = $event->getController();
 
-	public function onKernelController(FilterControllerEvent $event) {
-		$controller = $event->getController();
+        if (!is_array($controller)) {
+            return;
+        }
 
+        $request = $event->getRequest();
+        $route   = $request->get('_route');
 
-		if (!is_array($controller)) {
-			return;
-		}
+        $controller = $controller[0];
 
-		$request = $event->getRequest();
-		$route   = $request->get('_route');
+        if (is_object($controller) && method_exists($controller, "preExecute")) {
+            $controller->preExecute();
+        }
 
-		$controller = $controller[0];
+        if (!$this->needCMSPermission(get_class($controller), $route, $request->getPathInfo())) {
+            return;
+        }
 
-		if(is_object($controller) && method_exists($controller,"preExecute") )
-		{
-			$controller->preExecute();
-		}
+        $user = $controller->getUser();
 
-		if(!$this->needCMSPermission(get_class($controller),$route, $request->getPathInfo())) {
-			return;
-		}
+        if (!$user) {
+            return;
+        }
 
-		$user = $controller->getUser();
+        /* Caso for um administrador, possui acesso a tudo */
+        if ($user->getProfile() && $user->getProfile()->getAdministrator()) {
+            return;
+        }
 
-		if(!$user){
-			return;
-		}
+        if (empty($route)) {
+            return;
+        }
 
-		/* Caso for um administrador, possui acesso a tudo */
-		if($user->getProfile() && $user->getProfile()->getAdministrator()) {
-			return;
-		}
+        $params  = $request->get('_route_params');
 
-		if(empty($route))
-			return;
+        /* Informações do perfil do usuário */
+        if ($this->isPersonalInformation($user, $route, $params)) {
+            return;
+        }
 
-		$params  = $request->get('_route_params');
+        /* Permissoes */
+        if ($user->getProfile()) {
+            foreach ($user->getProfile()->getPermissions() as $permission) {
+                $pRoutes = explode("|", $permission->getRoute());
+                foreach ($pRoutes as $pRoute) {
+                    if ($pRoute == $route && $this->permissionService->hasParams($permission->getParams(), $params)) {
+                        return;
+                    }
+                }
+            }
+        }
 
-		/* Informações do perfil do usuário */
-		if($this->isPersonalInformation($user, $route, $params)) {
-			return;
-		}
+        $controller->get('session')->getFlashBag()->add('title', 'CMS');
+        $controller->get('session')->getFlashBag()->add('error', 'Você não tem permissão para acessar essa rota.');
 
-		/* Permissoes */
-		if($user->getProfile()) {
-			foreach($user->getProfile()->getPermissions() as $permission) {
-				$pRoutes = explode("|", $permission->getRoute());
-				foreach($pRoutes as $pRoute) {
-					if($pRoute == $route && $this->permissionService->hasParams($permission->getParams(), $params)) {
-						return;
-					}
-				}
-			}
-		}
+        $redirectUrl = $controller->generateUrl('fly_dashboard');
+        $event->setController(function () use ($redirectUrl) {
+            return new RedirectResponse($redirectUrl);
+        });
+    }
 
-		$controller->get('session')->getFlashBag()->add('title', 'CMS');
-		$controller->get('session')->getFlashBag()->add('error', 'Você não tem permissão para acessar essa rota.');
+    private function needCMSPermission($className, $route, $pathInfo)
+    {
+        /* Verificar apenas as rotas que pertecem ao CMS*/
+        if (strpos($pathInfo, "/") === false) {
+            return false;
+        }
 
-		$redirectUrl = $controller->generateUrl('fly_dashboard');
-		$event->setController(function() use ($redirectUrl) {
-			return new RedirectResponse($redirectUrl);
-		});
-	}
+        /* Classes pertencentes ao Symfony não devem ser verificadas */
+        if (strpos($className, "Symfony\\") === 0) {
+            return false;
+        }
 
-	private function needCMSPermission($className, $route, $pathInfo) {
-		/* Verificar apenas as rotas que pertecem ao CMS*/
-		if(strpos($pathInfo, "/") === false) {
-			return false;
-		}
+        /* Rotas do CMS que não fazem parte do controle de permissões */
+        switch ($className) {
+            case "Lincode\\Fly\\Bundle\\Controller\\LoginController":
+            case "Lincode\\Fly\\Bundle\\Controller\\MenuController":
+            case "Lincode\\Fly\\Bundle\\Controller\\DashboardController":
+                return false;
+                break;
+        }
 
-		/* Classes pertencentes ao Symfony não devem ser verificadas */
-		if(strpos($className, "Symfony\\") === 0) {
-			return false;
-		}
+        switch ($route) {
+            case "cms_gallery_upload":
+                return false;
+                break;
+        }
 
-		/* Rotas do CMS que não fazem parte do controle de permissões */
-		switch($className) {
-			case "Lincode\\Fly\\Bundle\\Controller\\LoginController":
-			case "Lincode\\Fly\\Bundle\\Controller\\MenuController":
-			case "Lincode\\Fly\\Bundle\\Controller\\DashboardController":
-				return false;
-				break;
-		}
+        $json = $this->permissionService->getJson();
+        if (array_key_exists('permissions', $json)) {
+            foreach ($json['permissions'] as $item) {
+                if (!array_key_exists('route', $item) || $item['route'] != $route) {
+                    continue;
+                }
 
-		switch($route) {
-			case "cms_gallery_upload":
-				return false;
-				break;
-		}
+                /* Já achou a rota, se não for free cancela */
+                if (!array_key_exists('permission', $item) || $item['permission'] != 'free') {
+                    break;
+                }
 
-		$json = $this->permissionService->getJson();
-		if(array_key_exists('permissions', $json)) {
-			foreach($json['permissions'] as $item) {
-				if(!array_key_exists('route', $item) || $item['route'] != $route)
-					continue;
+                return false;
+            }
+        }
 
-				/* Já achou a rota, se não for free cancela */
-				if(!array_key_exists('permission', $item) || $item['permission'] != 'free')
-					break;
+        return true;
+    }
 
-				return false;
-			}
-		}
+    private function isPersonalInformation($user, $route, $params)
+    {
+        switch ($route) {
+            case "fly_user_edit":
+                break;
+            case "fly_user_update":
+                break;
+            default:
+                return false;
+                break;
+        }
 
-		return true;
-	}
+        /* Verificacao se o id é o do cliente corrente */
+        if (!array_key_exists('id', $params) || $params['id'] != $user->getId()) {
+            return false;
+        }
 
-	private function isPersonalInformation($user, $route, $params) {
-		switch($route) {
-			case "fly_user_edit":
-				break;
-			case "fly_user_update":
-				break;
-			default:
-				return false;
-				break;
-		}
-
-		/* Verificacao se o id é o do cliente corrente */
-		if(!array_key_exists('id', $params) || $params['id'] != $user->getId()) {
-			return false;
-		}
-
-		return true;
-	}
+        return true;
+    }
 }

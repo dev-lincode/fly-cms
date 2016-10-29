@@ -19,7 +19,8 @@ abstract class BaseController extends Controller
     protected $parent = null;
     protected $permissionService = null;
 
-    public function preExecute(){
+    public function preExecute()
+    {
         $this->permissionService = $this->container->get('cms.permissions.service');
         $this->getUserPermissions();
     }
@@ -133,45 +134,50 @@ abstract class BaseController extends Controller
         return $this->redirectToRoute($this->configs['prefix_route']);
     }
 
-    public function getNewEntity(){
+    public function getNewEntity()
+    {
         return new $this->configs['entity_class'];
     }
 
-    public function getNewEntityForm(){
+    public function getNewEntityForm()
+    {
         return $this->configs['entity_form'];
     }
 
-    protected function showResults(){
+    protected function showResults()
+    {
         $controllerService = $this->get('fly.controller.service');
         return $controllerService->findAll($this->configs['entity']);
     }
 
-    protected function getUserPermissions(){
+    protected function getUserPermissions()
+    {
         $this->userPermissions['create'] = $this->checkPermissions($this->configs['prefix_route'] . '_new');
         $this->userPermissions['edit'] = $this->checkPermissions($this->configs['prefix_route'] . '_edit');
         $this->userPermissions['delete'] = $this->checkPermissions($this->configs['prefix_route'] . '_delete');
         $this->userPermissions['show'] = $this->checkPermissions($this->configs['prefix_route'] . '_show');
 
-        if(isset($this->configs['custom_routes'])){
-            foreach($this->configs['custom_routes'] as $route){
+        if (isset($this->configs['custom_routes'])) {
+            foreach ($this->configs['custom_routes'] as $route) {
                 $this->userPermissions[$route['route']] = $this->checkPermissions($route['route']);
             }
         }
     }
 
-    private function checkPermissions($route){
+    private function checkPermissions($route)
+    {
         $user = $this->getUser();
         $params = array();
 
-        if($user->getProfile() && $user->getProfile()->getAdministrator()) {
+        if ($user->getProfile() && $user->getProfile()->getAdministrator()) {
             return true;
         }
 
-        if($user->getProfile()) {
-            foreach($user->getProfile()->getPermissions() as $permission) {
+        if ($user->getProfile()) {
+            foreach ($user->getProfile()->getPermissions() as $permission) {
                 $pRoutes = explode("|", $permission->getRoute());
-                foreach($pRoutes as $pRoute) {
-                    if($pRoute == $route && $this->permissionService->hasParams($permission->getParams(), $params)) {
+                foreach ($pRoutes as $pRoute) {
+                    if ($pRoute == $route && $this->permissionService->hasParams($permission->getParams(), $params)) {
                         return true;
                     }
                 }
@@ -181,7 +187,15 @@ abstract class BaseController extends Controller
         return false;
     }
 
-    protected function beforePersist($entity, $form, $method) {}
-    protected function afterPersist($entity, $form, $method) {}
-    protected function beforeDelete($entity) {}
+    protected function beforePersist($entity, $form, $method)
+    {
+    }
+
+    protected function afterPersist($entity, $form, $method)
+    {
+    }
+
+    protected function beforeDelete($entity)
+    {
+    }
 }

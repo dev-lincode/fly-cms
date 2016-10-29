@@ -6,17 +6,27 @@ use Sensio\Bundle\GeneratorBundle\Generator\DoctrineCrudGenerator as Base;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class DoctrineCrudGenerator extends Base {
+class DoctrineCrudGenerator extends Base
+{
 
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $format, $routePrefix, $needWriteActions, $forceOverwrite)
-    {
+    public function generate(
+        BundleInterface $bundle,
+        $entity,
+        ClassMetadataInfo $metadata,
+        $format,
+        $routePrefix,
+        $needWriteActions,
+        $forceOverwrite
+    ) {
         echo "GENERATE\n";
         $this->routePrefix = $routePrefix;
         $this->routeNamePrefix = str_replace('/', '_', $routePrefix);
         $this->actions = $needWriteActions ? array('index', 'show', 'new', 'edit', 'delete') : array('index', 'show');
 
         if (count($metadata->identifier) != 1) {
-            throw new \RuntimeException('The CRUD generator does not support entity classes with multiple or no primary keys.');
+            throw new \RuntimeException(
+                'The CRUD generator does not support entity classes with multiple or no primary keys.'
+            );
         }
 
         $this->entity   = $entity;
@@ -29,7 +39,8 @@ class DoctrineCrudGenerator extends Base {
         $this->generateConfiguration();
     }
 
-    protected function setFormat($format) {
+    protected function setFormat($format)
+    {
         switch ($format) {
             case 'yml':
             case 'xml':
@@ -43,7 +54,8 @@ class DoctrineCrudGenerator extends Base {
         }
     }
 
-    protected function generateControllerClass($forceOverwrite) {
+    protected function generateControllerClass($forceOverwrite)
+    {
         $dir = $this->bundle->getPath();
 
         $parts = explode('\\', $this->entity);

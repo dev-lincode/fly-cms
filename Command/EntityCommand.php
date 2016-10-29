@@ -4,7 +4,8 @@ namespace Lincode\Fly\Bundle\Command;
 
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineEntityCommand;
 
-class EntityCommand extends GenerateDoctrineEntityCommand {
+class EntityCommand extends GenerateDoctrineEntityCommand
+{
 
     protected function configure()
     {
@@ -13,5 +14,4 @@ class EntityCommand extends GenerateDoctrineEntityCommand {
         $this->setName('fly:generate:entity');
         $this->setDescription('Generate CMS Entity!');
     }
-
 }

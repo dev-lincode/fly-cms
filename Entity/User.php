@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity()
  * @UniqueEntity(fields={"email"},errorPath="email",message="Este Email ja esta em uso.")
  */
-class User implements AdvancedUserInterface {
+class User implements AdvancedUserInterface
+{
     /**
      * @var int
      *
@@ -64,14 +65,15 @@ class User implements AdvancedUserInterface {
      */
     private $profile;
 
-    public function __construct() {
-        $this->salt = base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
+    public function __construct()
+    {
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -94,7 +96,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -117,7 +119,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -127,14 +129,16 @@ class User implements AdvancedUserInterface {
     /**
      * @return boolean
      */
-    public function getIsActive() {
+    public function getIsActive()
+    {
         return $this->isActive;
     }
 
     /**
      * @param boolean $isActive
      */
-    public function setIsActive( $isActive ) {
+    public function setIsActive($isActive)
+    {
         $this->isActive = $isActive;
     }
 
@@ -154,7 +158,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -177,7 +181,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get salt
      *
-     * @return string 
+     * @return string
      */
     public function getSalt()
     {
@@ -187,52 +191,60 @@ class User implements AdvancedUserInterface {
     /**
      * @return mixed
      */
-    public function getProfile() {
+    public function getProfile()
+    {
         return $this->profile;
     }
 
     /**
      * @param mixed $profile
      */
-    public function setProfile( $profile ) {
+    public function setProfile($profile)
+    {
         $this->profile = $profile;
     }
 
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
         return $this->email;
     }
 
-    public function equals(AdvancedUserInterface $user){
+    public function equals(AdvancedUserInterface $user)
+    {
         return $this->getId() == $user->getId();
     }
 
-    public function eraseCredentials() {
-        
+    public function eraseCredentials()
+    {
     }
 
-    public function getRoles() {
+    public function getRoles()
+    {
         return array('ROLE_CMS');
     }
 
-    public function isAccountNonExpired() {
+    public function isAccountNonExpired()
+    {
         return $this->isActive;
     }
 
-    public function isAccountNonLocked() {
+    public function isAccountNonLocked()
+    {
         return $this->isActive;
     }
 
-    public function isCredentialsNonExpired() {
+    public function isCredentialsNonExpired()
+    {
         return $this->isActive;
     }
 
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return $this->isActive;
     }
 }

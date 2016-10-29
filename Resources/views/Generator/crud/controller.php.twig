@@ -62,6 +62,5 @@ class {{ entity_class }}Controller extends BaseController
     {%- if 'delete' in actions %}
         {%- include 'crud/actions/delete_all.php.twig' %}
     {%- endif %}
-
 {% endblock class_body %}
 }
