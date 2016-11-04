@@ -66,7 +66,11 @@
                                     </div>
                                 </td>
                             {% endif %}
-                            <td><a href="{{ path( configs.prefix_route ~ '_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            {% if userPermissions.show and permissions.show %}
+                                <td><a href="{{ path( configs.prefix_route ~ '_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            {% else %}
+                                <td>{{ entity.id }}</td>
+                            {% endif %}
                             {% for field, value in configs.list_fields  %}
                                 {% if value.type is defined %}
                                     {% if value.type == 'date'  %}

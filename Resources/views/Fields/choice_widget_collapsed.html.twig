@@ -4,6 +4,14 @@
     {% endif %}
 
     {% for choice in form.vars.choices %}
-        <option {{ form.vars.value == choice.value ? "selected" }} value="{{ choice.value }}">{{ choice.label }}</option>
+        {% set selected = false %}
+
+        {% if form.vars.value is iterable and choice.value in form.vars.value %}
+            {% set selected = true %}
+        {% elseif form.vars.value == choice.value  %}
+            {% set selected = true %}
+        {% endif %}
+
+        <option {{ selected ? "selected" }} value="{{ choice.value }}">{{ choice.label }}</option>
     {% endfor %}
 </select>
