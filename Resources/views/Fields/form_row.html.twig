@@ -1,10 +1,16 @@
+{% if form.vars.attr.class is defined %}
+    {% set input_class = form.vars.attr.class %}
+{% else %}
+    {% set input_class = 'form-control input-sm' %}
+{% endif %}
+
 <div class="form-group {{ form.vars.errors | length > 0 ? 'has-error' }} ">
     {% if form.vars.label %}
         {{ form_label(form, null, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
     {% endif %}
     <div class="{{ form.vars.label ? 'col-sm-10' : 'col-sm-12' }}">
         <div class="">
-            {{ form_widget(form, { 'attr': {'class': 'form-control input-sm' } }) }}
+            {{ form_widget(form, { 'attr': {'class': input_class } }) }}
         </div>
         {{ form_errors(form) }}
     </div>
