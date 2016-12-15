@@ -32,7 +32,7 @@ class EntityFormService
             if (!$map['nullable']) {
                 $error = false;
 
-                if (is_null($entity->$getField())) {
+                if (method_exists($entity, $getField) && is_null($entity->$getField())) {
                     $error = true;
                 }
 
@@ -58,7 +58,7 @@ class EntityFormService
                 }
             }
 
-            if (!is_null($entity->$getField())) {
+            if (method_exists($entity, $getField) && !is_null($entity->$getField())) {
                 if ($map['unique']) {
                     $qb = $this->om->getRepository($repository)->createQueryBuilder('e');
                     $qb->where('e.' . $field . ' = :key')->setParameter('key', $entity->$getField());
