@@ -9,7 +9,7 @@
         </li>
 
         <li class="logo hidden-xs">
-            <a href="{{ path('fly_dashboard') }}">Fly CMS</a>
+            <a href="{{ path('fly_dashboard') }}">{{ fly.title is defined ? fly.title : 'Fly CMS' }}</a>
         </li>
     </ul>
 

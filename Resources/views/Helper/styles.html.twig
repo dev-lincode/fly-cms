@@ -8,7 +8,7 @@
 <link href="{{ asset('bundles/fly/plugins/summernote/dist/summernote.css') }}" rel="stylesheet">
 
 <!-- CSS -->
-<link href="{{ asset('bundles/fly/css/app.min.1.css') }}" rel="stylesheet">
+<link href="{{ fly.css is defined ? asset(fly.css) : asset('bundles/fly/css/app.min.1.css') }}" rel="stylesheet">
 <link href="{{ asset('bundles/fly/css/app.min.2.css') }}" rel="stylesheet">
 
 <script src="{{ asset('bundles/fly/plugins/jquery/dist/jquery.min.js') }}"></script>
