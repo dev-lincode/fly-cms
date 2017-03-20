@@ -3,12 +3,22 @@
 
 {% block body %}
     {% if userPermissions.create and permissions.create %}
-        <ul class="add-new-buttom">
+        <ul class="add-new-buttom pull-left">
             <li>
                 <a class="btn btn-default waves-effect" href="{{ path( configs.prefix_route ~ '_new') }}">Adicionar Novo</a>
             </li>
         </ul>
     {% endif %}
+
+    {% if userPermissions.edit and permissions.edit and routeExists(routeBase ~ '_translation') and entity.id != '' %}
+        <ul class="translate-buttom pull-right">
+            <li>
+                <a class="btn btn-inverse waves-effect" href="{{ path(routeBase ~ '_translation', { 'id': entity.id }) }}">Traduzir</a>
+            </li>
+        </ul>
+    {% endif %}
+
+    <div class="clearfix"></div>
 
     {% include 'FlyBundle:Helper:flashbag.html.twig' %}
 
