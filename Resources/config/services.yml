@@ -29,3 +29,11 @@ services:
     fly.upload.service:
         class: Lincode\Fly\Bundle\Service\UploadService
         arguments: ["@doctrine.orm.entity_manager", "%fly%"]
+
+    flye.twig_extension:
+        class: Lincode\Fly\Bundle\Twig\FlyExtension
+        arguments:
+            container: "@service_container"
+        public: true
+        tags:
+            - { name: twig.extension }

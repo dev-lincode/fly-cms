@@ -18,6 +18,7 @@ abstract class BaseController extends Controller
     protected $userPermissions = array();
     protected $parent = null;
     protected $permissionService = null;
+    protected $entityFormParam  = null;
 
     public function preExecute()
     {
