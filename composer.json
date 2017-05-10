@@ -12,5 +12,10 @@
     ],
     "autoload": {
         "psr-4": { "Lincode\\Fly\\Bundle\\": "" }
+    },
+    "require": {
+        "gedmo/doctrine-extensions": "2.4.*@dev",
+        "doctrine/doctrine-fixtures-bundle": "2.*",
+        "phpoffice/phpexcel": "1.8.0"
     }
 }
