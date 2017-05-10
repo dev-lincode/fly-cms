@@ -19,7 +19,7 @@ class LoginService
     private $formFactory;
     private $router;
 
-    public function __construct(AuthenticationUtils $authenticationUtils, FormFactory $formFactory, Router $router)
+    public function __construct(AuthenticationUtils $authenticationUtils, FormFactory $formFactory, $router)
     {
         $this->authenticationUtils = $authenticationUtils;
         $this->formFactory = $formFactory;

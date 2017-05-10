@@ -92,7 +92,6 @@ class UploadService
             $destiny .= "/";
         }
 
-
         $getter = "get" . ucwords($field);
         $setter = "set" . ucwords($field);
 

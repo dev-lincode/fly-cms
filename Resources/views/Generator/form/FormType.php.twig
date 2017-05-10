@@ -26,7 +26,7 @@ class {{ form_class }} extends AbstractType
         {%- for field in fields -%}
             {%- if fields_mapping[field] is defined and fields_mapping[field]['type'] in ['date', 'time', 'datetime'] %}
 
-            ->add('{{ field }}', '{{ fields_mapping[field]['type'] }}')
+            ->add('{{ field }}', TextType::class, ['label' => '{{ field|capitalize }}', 'required' => true])
 
             {%- else %}
 

@@ -49,6 +49,9 @@ abstract class BaseController extends Controller
         $form = $controllerService->getForm($this->getNewEntityForm(), $entity, $urlResponse);
         $form->handleRequest($request);
 
+        //dump($request);
+        //die;
+
         if ($form->isSubmitted() && $form->isValid()) {
             $formValidateService = $this->get('fly.form.service');
             if ($formValidateService->validadeForm($form, $this->configs['entity'], $entity)) {
