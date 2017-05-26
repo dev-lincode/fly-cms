@@ -24,17 +24,15 @@ class GalleryController extends Controller {
         if(substr($destiny, -1) != "/")
             $destiny .= "/";
 
-        $uploadDir = substr($this->get('kernel')->getRootDir(), 0, -3) . '/web/' . $destiny;
-        if(!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+        $file = $request->files->get('file');
 
-        $uploadfile = $_FILES['file']['name'];
+        $uploadfile = $file->getClientOriginalName();
         $extension = explode('.', $uploadfile);
         $extension = $extension[count($extension) - 1];
-
         $fileName = md5($uploadfile . date('dmYHis')) . '.' . $extension;
-        move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName);
+
+        $uploadService = $this->get('fly.upload.service');
+        $uploadService->moveFile($file, $destiny, $fileName);
 
         return new Response($destiny . $fileName);
     }

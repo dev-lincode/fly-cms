@@ -18,7 +18,6 @@
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
-        console.log('oiiii');
         {{ form.vars.id }}_load_uploader();
     });
 
@@ -31,7 +30,7 @@
             container: document.getElementById('{{ form.vars.id }}_container'), // ... or DOM Element itself
             url : "{{ path('cms_gallery_upload', { destiny:  destiny_path }) }}",
             flash_swf_url : "{{ asset('bundles/fly/plugins/plupload/plupload/assets/lib/Moxie.swf') }}",
-            silverlight_xap_url : "{{ asset('bundles/fly/plugins/plupload/plupload/assets/lib/Moxie.xap') }}",
+            silverlight_xap_url : "{{ asset('bundles/fly/plugins/plupload//plupload/assets/lib//Moxie.xap') }}",
 
             filters : {
                 max_file_size : '10mb',
@@ -101,7 +100,6 @@
         }
 
         $('form#cadForm').submit(function() {
-            //console.log({{ form.vars.id }}_uploader);
             if({{ form.vars.id }}_uploader.total.queued > 0){
                 {{ form.vars.id }}_uploader.start();
                 return false;
