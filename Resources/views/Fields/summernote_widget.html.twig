@@ -1,0 +1,43 @@
+<textarea id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" class="summernote_{{ form.vars.id }}" {{ disabled ? " disabled"}}>{{ form.vars.value }}</textarea>
+<script>
+    $(document).ready(function() {
+        $('textarea.summernote_{{ form.vars.id }}').summernote({
+            lang: 'pt-BR',
+            toolbar: [
+                {{ form.vars.groupStyle is not empty ? ("['style', [" ~ form.vars.groupStyle ~ "]],")|raw }}
+                {{ form.vars.groupFormat is not empty ? ("['format', [" ~ form.vars.groupFormat ~ "]],")|raw }}
+                {{ form.vars.groupFont is not empty ? ("['font', [" ~ form.vars.groupFont ~ "]],")|raw }}
+                {{ form.vars.groupColor is not empty ? ("['color', [" ~ form.vars.groupColor ~ "]],")|raw }}
+                {{ form.vars.groupFontsize is not empty ? ("['size', [" ~ form.vars.groupFontsize ~ "]],")|raw }}
+                {{ form.vars.groupPara is not empty ? ("['para', [" ~ form.vars.groupPara ~ "]],")|raw }}
+                {{ form.vars.groupHeight is not empty ? ("['height', [" ~ form.vars.groupHeight ~ "]],")|raw }}
+                {{ form.vars.groupTable is not empty ? ("['table', [" ~ form.vars.groupTable ~ "]],")|raw }}
+                {{ form.vars.groupInsert is not empty ? ("['insert', [" ~ form.vars.groupInsert ~ "]],")|raw }}
+                {{ form.vars.groupMisc is not empty ? ("['misc', [" ~ form.vars.groupMisc ~ "]],")|raw }}
+            ],
+            locale: 'pt-BR',
+            onkeyup: function(e) {
+                var thisNote = $(this);
+                var clearText = function(someNote){
+                    var original = someNote.html();
+                    if(original == '<p><br></p>')
+                        someNote.html('');
+                };
+                setTimeout(function () {
+                    clearText(thisNote);
+                }, 10);
+            },
+            onpaste: function(e) {
+                var thisNote = $(this);
+                var updatePastedText = function(someNote){
+                    var original = someNote.code();
+                    var cleaned = CleanPastedHTML(original);
+                    someNote.code('').html(cleaned);
+                };
+                setTimeout(function () {
+                    updatePastedText(thisNote);
+                }, 10);
+            }
+        });
+    });
+</script>

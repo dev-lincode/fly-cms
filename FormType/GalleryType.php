@@ -2,18 +2,14 @@
 namespace Lincode\Fly\Bundle\FormType;
 
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GalleryType extends CollectionType
 {
-    public function getName()
-    {
-        return 'gallery';
-    }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'allow_add' => true,
@@ -26,4 +22,15 @@ class GalleryType extends CollectionType
             'data_class' => null,
         ));
     }
+
+    public function getExtendedType()
+    {
+        return CollectionType::class;
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'gallery';
+    }
+
 }

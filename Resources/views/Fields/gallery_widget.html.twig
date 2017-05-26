@@ -1,0 +1,112 @@
+{% set destiny_path = (form.vars.attr is defined and form.vars.attr.destiny_path is defined)?form.vars.attr.destiny_path|replace("/","-") :"" %}
+
+<div id="{{ form.vars.id }}_list" class="uploads">
+    {% for key, value in form.vars.value %}
+        <div class="{{ form.vars.id }}_box uploads_upload" data-input="{{ form.vars.id }}_{{key}}"><div class="apagar"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div><div class="thumb-img"><img src="{{ asset(value) }}"></div></div>
+    {% endfor %}
+    <div class="clearfix"></div>
+</div>
+<br/>
+<div id="{{ form.vars.id }}_container">
+    <button type="button" id="{{ form.vars.id }}_pickup" class="btn multiple btn-adicionar-imagens"> Adicionar imagens</button>
+</div>
+<br/>
+<div id="{{ form.vars.id }}_inputs">
+    {% for key, value in form.vars.value %}
+        <input type="hidden" id="{{ form.vars.id }}_{{key}}" name="{{ form.vars.full_name}}[{{key}}]" required="required" value="{{ value }}">
+    {% endfor %}
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        console.log('oiiii');
+        {{ form.vars.id }}_load_uploader();
+    });
+
+    function {{ form.vars.id }}_load_uploader() {
+
+        var {{ form.vars.id }}_count = {{ form.vars.value|length }};
+        var {{ form.vars.id }}_uploader = new plupload.Uploader({
+            runtimes : 'html5,flash,silverlight,html4',
+            browse_button : '{{ form.vars.id }}_pickup', // you can pass in id...
+            container: document.getElementById('{{ form.vars.id }}_container'), // ... or DOM Element itself
+            url : "{{ path('cms_gallery_upload', { destiny:  destiny_path }) }}",
+            flash_swf_url : "{{ asset('bundles/fly/plugins/plupload/plupload/assets/lib/Moxie.swf') }}",
+            silverlight_xap_url : "{{ asset('bundles/fly/plugins/plupload/plupload/assets/lib/Moxie.xap') }}",
+
+            filters : {
+                max_file_size : '10mb',
+                mime_types: [
+                    {title : "Image files", extensions : "jpg,gif,png"}
+                ]
+            },
+
+            init: {
+                PostInit: function() {
+                    {{ form.vars.id }}_action_remove();
+                    //document.getElementById('{{ form.vars.id }}_list').innerHTML = '';
+                },
+
+                FilesAdded: function(up, files) {
+                    plupload.each(files, function(file) {
+                        var preloader = new mOxie.Image();
+
+                        var newfield = '<div class="{{ form.vars.id }}_box uploads_upload just-sended" id="' + file.id + '"><div class="apagar"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div><div class="thumb-img"><img></div><span class="filesize">' + plupload.formatSize(file.size) + '</span></div>';
+
+                        $('#{{ form.vars.id }}_list').prepend(newfield);
+
+                        preloader.onload = function() {
+                            preloader.downsize( 150, 150 );
+                            $('#' + file.id + ' img').attr('src', preloader.getAsDataURL());
+                        };
+
+                        preloader.load( file.getSource() );
+                    });
+
+                    {{ form.vars.id }}_action_remove();
+                },
+
+                FileUploaded: function(up, file, info) {
+                    var image = info.response;
+
+                    var id = "{{ form.vars.id }}_" + {{ form.vars.id }}_count;
+                    var name = "{{ form.vars.full_name}}[" + {{ form.vars.id }}_count + "]";
+
+                    $("#{{ form.vars.id }}_inputs").append('<input type="hidden" id="' + id + '" name="' + name + '" required="required" value="' + image +'">');
+                    {{ form.vars.id }}_count++;
+                },
+
+                UploadProgress: function(up, file) {
+                    $("#" + file.id).children('b').html('<span>' + file.percent + "%</span>");
+                },
+                UploadComplete: function(){
+                    $('form#cadForm').submit();
+                },
+
+                Error: function(up, err) {
+                    console.log("\nError #" + err.code + ": " + err.message);
+                }
+            }
+        });
+
+        {{ form.vars.id }}_uploader.init();
+        //console.log({{ form.vars.id }}_uploader);
+
+        function {{ form.vars.id }}_action_remove() {
+            $(".{{ form.vars.id }}_box .apagar").click(function() {
+                var file_input = $(this).parent().data('input');
+                $(this).parent().remove();
+                $("#" + file_input).remove();
+                //console.log('remove');
+            });
+        }
+
+        $('form#cadForm').submit(function() {
+            //console.log({{ form.vars.id }}_uploader);
+            if({{ form.vars.id }}_uploader.total.queued > 0){
+                {{ form.vars.id }}_uploader.start();
+                return false;
+            }
+        });
+    }
+    load_uploader_function = {{ form.vars.id }}_load_uploader;
+</script>

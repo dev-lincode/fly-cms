@@ -38,12 +38,6 @@
     {% endspaceless %}
 {% endblock form_label %}
 
-{#{% block date_widget %}#}
-    {#{% spaceless %}#}
-        {#{% include 'FlyBundle:Fields:date_widget.html.twig' with { form : form } only %}#}
-    {#{% endspaceless %}#}
-{#{% endblock date_widget %}#}
-
 {% block collection_widget %}
     {% spaceless %}
         {% include 'FlyBundle:Fields:collection_widget.html.twig' with { form : form, disabled : disabled } only %}
@@ -52,23 +46,18 @@
 
 {% block file_widget %}
     {% spaceless %}
-        {% if form.vars.data %}
-            <a class="btn btn-primary" href="{{ asset(form.vars.data) }}" target="_blank" download>
-                <i class="glyphicon glyphicon-file"></i> Download
-            </a>
-            <br>
-            <br>
-        {% endif %}
-
-        <div class="fileinput fileinput-new" data-provides="fileinput">
-            <span class="btn btn-primary btn-file m-r-10">
-                <span class="fileinput-new">Selecione o arquivo</span>
-                <span class="fileinput-exists">Alterar</span>
-                <input type="file" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ block('widget_attributes') }}>
-            </span>
-            <span class="fileinput-filename"></span>
-            <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
-        </div>
-
+        {% include 'FlyBundle:Fields:file_widget.html.twig' with { form : form } only %}
     {% endspaceless %}
 {% endblock file_widget %}
+
+{% block gallery_widget %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:gallery_widget.html.twig' with { form : form } only %}
+    {% endspaceless %}
+{% endblock gallery_widget %}
+
+{% block summernote_widget %}
+    {% spaceless %}
+        {% include 'FlyBundle:Fields:summernote_widget.html.twig' with { form : form, disabled : disabled    } only %}
+    {% endspaceless %}
+{% endblock summernote_widget %}

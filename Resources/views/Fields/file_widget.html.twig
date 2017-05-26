@@ -1,0 +1,17 @@
+{% if form.vars.data %}
+    <a class="btn btn-primary" href="{{ asset(form.vars.data) }}" target="_blank" download>
+        <i class="glyphicon glyphicon-file"></i> Download
+    </a>
+    <br>
+    <br>
+{% endif %}
+
+<div class="fileinput fileinput-new" data-provides="fileinput">
+            <span class="btn btn-primary btn-file m-r-10">
+                <span class="fileinput-new">Selecione o arquivo</span>
+                <span class="fileinput-exists">Alterar</span>
+                <input type="file" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ block('widget_attributes') }}>
+            </span>
+    <span class="fileinput-filename"></span>
+    <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+</div>
