@@ -28,6 +28,11 @@ services:
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
 
+    cms.form.type.gallery:
+        class: Lincode\Fly\Bundle\FormType\GalleryType
+        tags:
+            - { name: form.type, alias: gallery }
+
     fly.navegation.service:
         class: Lincode\Fly\Bundle\Service\NavegationService
         arguments: ["%fly%"]
