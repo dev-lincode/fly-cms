@@ -73,15 +73,13 @@
                             {% endif %}
                             {% for field, value in configs.list_fields  %}
                                 {% if value.type is defined %}
-                                    {% if value.type == 'date'  %}
-                                        <td>{{ attribute(entity, field) | date('d/m/Y') }}</td>
-                                    {% elseif value.type == 'boolean' %}
-                                        <td><i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i></td>
-                                    {% elseif value.type == 'image' %}
-                                        <td><img height="50" src="{{ asset(attribute(entity, field)) }}" /></td>
-                                    {% else %}
-                                        <td>{{ attribute(entity, field) }}</td>
-                                    {% endif %}
+                                    <td>
+                                        {% include 'FlyBundle:CRUD:inc/type_render.html.twig' with {
+                                            value: value,
+                                            field: field,
+                                            entity: entity
+                                        } only %}
+                                    </td>
                                 {% else %}
                                     <td>{{ attribute(entity, field) }}</td>
                                 {% endif %}
@@ -89,12 +87,12 @@
                             <td>
                                 {% if userPermissions.show and permissions.show %}
                                     <a class="btn btn-default waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Visualizar" href="{{ path( configs.prefix_route ~ '_show', { 'id': entity.id }) }}"><i class="icon-action zmdi zmdi-eye"></i></a>
-                                    &nbsp;&nbsp;
+                                    &nbsp;
                                 {% endif %}
 
                                 {% if userPermissions.edit and permissions.edit %}
                                     <a class="btn btn-default waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Editar" href="{{ path( configs.prefix_route ~ '_edit', { 'id': entity.id }) }}"><i class="icon-action zmdi zmdi-edit"></i></a>
-                                    &nbsp;&nbsp;
+                                    &nbsp;
                                 {% endif %}
 
                                 {% if userPermissions.delete and permissions.delete %}

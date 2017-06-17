@@ -40,15 +40,11 @@
                         {% if value.type is defined %}
                             <th class="col-md-3">{{ value.label }}</th>
                             <td class="col-md-9">
-                                {% if value.type == 'date'  %}
-                                    {{ attribute(entity, field) | date('d/m/Y') }}
-                                {% elseif value.type == 'boolean' %}
-                                    <i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i>
-                                {% elseif value.type == 'image' %}
-                                    <img height="100" src="{{ asset(attribute(entity, field)) }}" />
-                                {% else %}
-                                    {{ attribute(entity, field) }}
-                                {% endif %}
+                                {% include 'FlyBundle:CRUD:inc/type_render.html.twig' with {
+                                    value: value,
+                                    field: field,
+                                    entity: entity
+                                } only %}
                             </td>
                         {% else %}
                             {% if value.label is defined %}
