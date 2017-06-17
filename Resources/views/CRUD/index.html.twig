@@ -77,6 +77,8 @@
                                         <td>{{ attribute(entity, field) | date('d/m/Y') }}</td>
                                     {% elseif value.type == 'boolean' %}
                                         <td><i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i></td>
+                                    {% elseif value.type == 'image' %}
+                                        <td><img height="50" src="{{ asset(attribute(entity, field)) }}" /></td>
                                     {% else %}
                                         <td>{{ attribute(entity, field) }}</td>
                                     {% endif %}
