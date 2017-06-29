@@ -47,10 +47,8 @@ abstract class BaseController extends Controller
         $urlResponse = $this->generateUrl($this->configs['prefix_route'] . '_new');
 
         $form = $controllerService->getForm($this->getNewEntityForm(), $entity, $urlResponse);
+        $this->beforeRenderForm($form, null);
         $form->handleRequest($request);
-
-        //dump($request);
-        //die;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formValidateService = $this->get('fly.form.service');
@@ -81,6 +79,7 @@ abstract class BaseController extends Controller
         $urlResponse = $this->generateUrl($this->configs['prefix_route'] . '_edit', array('id' => $id));
 
         $form = $controllerService->getForm($this->getNewEntityForm(), $entity, $urlResponse);
+        $this->beforeRenderForm($form, $entity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -200,6 +199,10 @@ abstract class BaseController extends Controller
     }
 
     protected function beforeDelete($entity)
+    {
+    }
+
+    protected function beforeRenderForm($form, $entity)
     {
     }
 }
