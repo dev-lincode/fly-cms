@@ -49,7 +49,7 @@ class FlyControllerService
         return $form;
     }
 
-    public function save($objects)
+    public function save($objects, $flush = true)
     {
 
         if (is_array($objects)) {
@@ -60,10 +60,12 @@ class FlyControllerService
             $this->om->persist($objects);
         }
 
-        $this->om->flush();
+        if($flush){
+            $this->om->flush();
+        }
     }
 
-    public function remove($objects)
+    public function remove($objects, $flush = true)
     {
 
         if (is_array($objects)) {
@@ -74,6 +76,13 @@ class FlyControllerService
             $this->om->remove($objects);
         }
 
+        if($flush){
+            $this->om->flush();
+        }
+    }
+
+    public function flush()
+    {
         $this->om->flush();
     }
 }
