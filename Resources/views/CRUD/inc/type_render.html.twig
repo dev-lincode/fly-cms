@@ -5,7 +5,9 @@
 {% elseif value.type == 'boolean' %}
     <i style="font-size: 18px;" class="zmdi zmdi-{{ attribute(entity, field) ? 'check-circle' : 'close-circle' }} zmdi-hc-fw"></i>
 {% elseif value.type == 'image' %}
-    <img height="50" src="{{ asset(attribute(entity, field)) }}" />
+    {% if attribute(entity, field) %}
+        <img height="50" src="{{ asset(attribute(entity, field)) }}" />
+    {% endif %}
 {% elseif value.type == 'html' %}
     {{ attribute(entity, field) | raw }}
 {% else %}
