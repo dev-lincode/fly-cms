@@ -2,3 +2,6 @@ cms_member_annotation:
     resource: "@FlyBundle/Controller"
     prefix:   /
     type: annotation
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
