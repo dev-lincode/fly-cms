@@ -37,7 +37,10 @@ class BeforeControllerListener
             return;
         }
 
-        $user = $controller->getUser();
+        $user = null;
+        if(method_exists($controller, 'getUser')){
+            $user = $controller->getUser();
+        }
 
         if (!$user) {
             return;

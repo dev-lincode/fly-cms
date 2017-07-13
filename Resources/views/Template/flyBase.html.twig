@@ -20,9 +20,6 @@
     <section id="content">
         <div class="container">
             {% block body %}{% endblock %}
-            {#<div class="block-header">#}
-                {#<h2>Dashboard</h2>#}
-            {#</div>#}
         </div>
     </section>
 </section>
@@ -40,6 +37,9 @@
 
 {% include 'FlyBundle:Helper:scripts.html.twig' %}
 
+{% if configs.helper_template is defined and configs.helper_template is not null  %}
+    {% include configs.helper_template %}
+{% endif %}
 </body>
 </html>
 <!-- Localized -->
