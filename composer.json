@@ -13,16 +13,9 @@
     "autoload": {
         "psr-4": { "Lincode\\Fly\\Bundle\\": "" }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/dev-lincode/fly-commons.git"
-        }
-    ],
     "require": {
         "gedmo/doctrine-extensions": "2.4.*@dev",
         "doctrine/doctrine-fixtures-bundle": "2.*",
-        "phpoffice/phpexcel": "1.8.0",
-        "lincode/commons": "dev-master"
+        "phpoffice/phpexcel": "1.8.0"
     }
 }
