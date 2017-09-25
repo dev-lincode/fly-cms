@@ -16,7 +16,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:dev-lincode/fly-commons.git"
+            "url": "https://github.com/dev-lincode/fly-commons.git"
         }
     ],
     "require": {
