@@ -4,7 +4,7 @@ namespace Lincode\Fly\Bundle\Service;
 
 use Symfony\Component\Yaml\Yaml;
 
-class NavegationService extends Service
+class NavegationService
 {
     private $navegationFile = null;
 
@@ -16,8 +16,6 @@ class NavegationService extends Service
                 $this->navegationFile = $flyConfigs['navegation'];
             }
         }
-
-        parent::__construct($container);
     }
 
     public function loadFile()

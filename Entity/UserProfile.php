@@ -3,6 +3,7 @@
 namespace Lincode\Fly\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lincode\Fly\Bundle\Service\Service;
 
 /**
  * UserProfile
@@ -15,9 +16,8 @@ class UserProfile
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="string", length=255, unique=true)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -47,6 +47,7 @@ class UserProfile
      */
     public function __construct()
     {
+        $this->id = Service::UUID();
         $this->routes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

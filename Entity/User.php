@@ -3,6 +3,7 @@
 namespace Lincode\Fly\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lincode\Fly\Bundle\Service\Service;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -16,11 +17,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements AdvancedUserInterface
 {
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="string", length=255, unique=true)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -66,6 +66,7 @@ class User implements AdvancedUserInterface
 
     public function __construct()
     {
+        $this->id = Service::UUID();
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
