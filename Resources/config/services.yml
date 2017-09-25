@@ -19,14 +19,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
     cms.form.type.gallery:
         class: Lincode\Fly\Bundle\FormType\GalleryType
@@ -56,8 +56,7 @@ services:
 
     fly.twig_extension:
         class: Lincode\Fly\Bundle\Twig\FlyExtension
-        arguments:
-            container: "@service_container"
+        arguments: ["@service_container"]
         public: true
         tags:
             - { name: twig.extension }

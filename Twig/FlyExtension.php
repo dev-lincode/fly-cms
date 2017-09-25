@@ -2,11 +2,9 @@
 
 namespace Lincode\Fly\Bundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class FlyExtension extends \Twig_Extension {
     private $container;
-    public function __construct(ContainerInterface $container) {
+    public function __construct($container) {
         $this->container = $container;
     }
 
