@@ -18,10 +18,9 @@ class NavegationService
         }
     }
 
-    public function loadFile()
+    public function loadFile($navegation = null)
     {
-        $navegation = null;
-        if ($this->navegationFile) {
+        if (is_null($navegation) && $this->navegationFile) {
             $navegation = Yaml::parse(file_get_contents($this->navegationFile));
         }
 

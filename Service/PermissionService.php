@@ -27,10 +27,14 @@ class PermissionService
         return true;
     }
 
-    public function getJson()
+    public function getJson($navegationFile = null)
     {
 
-        $json = json_decode(file_get_contents($this->flyConfig['navegation']), true);
+        if(is_null($navegationFile)){
+            $navegationFile = $this->flyConfig['navegation'];
+        }
+
+        $json = json_decode(file_get_contents($navegationFile), true);
         if ($json === null) {
             throw new \Exception('CONFIG JSON - ' . $this->getJsonError());
         }

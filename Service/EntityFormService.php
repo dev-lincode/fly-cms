@@ -3,6 +3,8 @@
 namespace Lincode\Fly\Bundle\Service;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
@@ -36,11 +38,11 @@ class EntityFormService
                     $error = true;
                 }
 
-                if ($form->get($field)->getConfig()->getType()->getName() == 'hidden') {
+                if ($form->get($field)->getConfig()->getType() == HiddenType::class) {
                     continue;
                 }
 
-                if ($form->get($field)->getConfig()->getType()->getName() == 'file') {
+                if ($form->get($field)->getConfig()->getType() == FileType::class) {
                     if (gettype($entity->$getField()) == 'string' && $entity->$getField() == "@#REMOVE#@") {
                         $error = true;
                     } else {
