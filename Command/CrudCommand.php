@@ -28,7 +28,7 @@ class CrudCommand extends GenerateDoctrineCrudCommand
         return $this->generator;
     }
 
-    protected function createGenerator()
+    protected function createGenerator($bundle = NULL)
     {
         return new DoctrineCrudGenerator($this->getContainer()->get('filesystem'), __DIR__ . '/../Resources/views/Generator/');
     }
